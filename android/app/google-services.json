@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "849699052475",
+    "firebase_url": "https://app-condominio-e1e36.firebaseio.com",
+    "project_id": "app-condominio-e1e36",
+    "storage_bucket": "app-condominio-e1e36.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849699052475:android:85a98017e2e1bd7ab4c29e",
+        "android_client_info": {
+          "package_name": "com.iaz.app_condominio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "849699052475-7tmkc1ob23qdun834dco95c468mqnua3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9607CLC9JmzDxbdbZEZbk1ID835tTcPg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "849699052475-7tmkc1ob23qdun834dco95c468mqnua3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,10 +1,11 @@
-import 'package:app_condominio/ui/screens/home/widgets/option_home_item.dart';
+import 'package:app_condominio/user/ui/screens/home/widgets/option_home_item.dart';
 import 'package:app_condominio/utils/colors_res.dart';
+import 'package:app_condominio/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
-class HomeScreen4 extends StatelessWidget {
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,16 +45,37 @@ class HomeScreen4 extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         OptionHomeItem(
-                          labelText: "Atualização de Perfil",
-                          iconData: Icons.add,
+                          labelText: "Centro de Visitantes",
+                          iconData: Icons.people,
                           onTapFunction: () {},
                         ),
                         SizedBox(
                           width: 40,
                         ),
                         OptionHomeItem(
-                          labelText: "Troca de Senha",
-                          iconData: Icons.add,
+                          labelText: "Enviar Localização",
+                          iconData: Icons.location_on,
+                          onTapFunction: () {},
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        OptionHomeItem(
+                          labelText: "Eventos",
+                          iconData: Icons.event,
+                          onTapFunction: () {},
+                        ),
+                        SizedBox(
+                          width: 40,
+                        ),
+                        OptionHomeItem(
+                          labelText: "Salão de Festas",
+                          iconData: Icons.music_note,
                           onTapFunction: () {},
                         ),
                       ],

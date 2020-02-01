@@ -1,6 +1,4 @@
-enum Status { pendingApproval, active, inactive, undefined }
-
-class User {
+class Admin {
   final int id;
   final String name;
   final String email;
@@ -8,17 +6,15 @@ class User {
   final String building;
   final String apartment;
   final String password;
-  Status status;
 
-  User(
+  Admin(
       {this.id,
       this.name,
       this.email,
       this.rg,
       this.building,
       this.apartment,
-      this.password,
-      this.status});
+      this.password});
 
   Map<String, dynamic> toJson() => {
         'name': name,
@@ -26,32 +22,18 @@ class User {
         'rg': rg,
         'building': building,
         'apartment': apartment,
-        'password': password,
-        'status': status.toString()
+        'password': password
       };
 
   static fromJson(Map<String, dynamic> parsedJson) {
-    return User(
+    return Admin(
         id: parsedJson['id'],
         name: parsedJson['name'],
         rg: parsedJson['rg'],
         email: parsedJson['email'],
         building: parsedJson['building'],
         apartment: parsedJson['apartment'],
-        password: parsedJson['password'],
-        status: statusFromString(parsedJson['status']));
+        password: parsedJson['password']);
   }
 
-  static Status statusFromString(String status) {
-    switch (status) {
-      case "Status.active":
-        return Status.active;
-      case "Status.inactive":
-        return Status.inactive;
-      case "Status.pendingApproval":
-        return Status.pendingApproval;
-      default:
-        return Status.undefined;
-    }
-  }
 }

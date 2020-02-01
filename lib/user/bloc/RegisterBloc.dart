@@ -15,6 +15,7 @@ class RegisterBloc extends Bloc<GeneralBlocState, GeneralBlocState>
   final FocusNode nameFocus = FocusNode();
   final FocusNode emailFocus = FocusNode();
   final FocusNode rgFocus = FocusNode();
+  final FocusNode buildingFocus = FocusNode();
   final FocusNode apartmentFocus = FocusNode();
   final FocusNode passwordFocus = FocusNode();
   final FocusNode confirmPasswordFocus = FocusNode();
@@ -23,6 +24,7 @@ class RegisterBloc extends Bloc<GeneralBlocState, GeneralBlocState>
   var nameSubject = BehaviorSubject<String>();
   var emailSubject = BehaviorSubject<String>();
   var rgSubject = BehaviorSubject<String>();
+  var buildingSubject = BehaviorSubject<String>();
   var apartmentSubject = BehaviorSubject<String>();
   var passwordSubject = BehaviorSubject<String>();
   var confirmPasswordSubject = BehaviorSubject<String>();
@@ -35,6 +37,8 @@ class RegisterBloc extends Bloc<GeneralBlocState, GeneralBlocState>
   Function(String) get changeEmail => emailSubject.sink.add;
 
   Function(String) get changeRg => rgSubject.sink.add;
+
+  Function(String) get changeBuilding => buildingSubject.sink.add;
 
   Function(String) get changeApartment => apartmentSubject.sink.add;
 
@@ -55,6 +59,7 @@ class RegisterBloc extends Bloc<GeneralBlocState, GeneralBlocState>
     nameSubject.close();
     emailSubject.close();
     rgSubject.close();
+    buildingSubject.close();
     apartmentSubject.close();
     passwordSubject.close();
     confirmPasswordSubject.close();
@@ -101,6 +106,7 @@ class RegisterBloc extends Bloc<GeneralBlocState, GeneralBlocState>
           name: nameSubject.value,
           email: emailSubject.value,
           rg: rgSubject.value,
+          building: buildingSubject.value,
           apartment: apartmentSubject.value,
           password: passwordSubject.value,
           status: Status.pendingApproval);

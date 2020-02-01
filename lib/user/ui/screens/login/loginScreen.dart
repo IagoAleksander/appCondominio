@@ -1,4 +1,4 @@
-import 'package:app_condominio/bloc/LoginBloc.dart';
+import 'package:app_condominio/user/bloc/LoginBloc.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
 import 'package:app_condominio/utils/validators/validators.dart';

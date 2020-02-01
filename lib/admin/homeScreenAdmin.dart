@@ -1,11 +1,11 @@
-import 'package:app_condominio/ui/screens/home/widgets/option_home_item.dart';
+import 'package:app_condominio/user/ui/screens/home/widgets/option_home_item.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreenAdmin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +48,8 @@ class HomeScreen extends StatelessWidget {
                           labelText: "Centro de Visitantes",
                           iconData: Icons.people,
                           onTapFunction: () {
-                            Navigator.pushNamed(context, Constants.visitorsCentreRoute);
+                            Navigator.pushNamed(
+                                context, Constants.visitorsCentreRoute);
                           },
                         ),
                         SizedBox(

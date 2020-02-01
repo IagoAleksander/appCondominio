@@ -1,6 +1,6 @@
-import 'package:app_condominio/bloc/RegisterBloc.dart';
+import 'package:app_condominio/user/bloc/RegisterBloc.dart';
 import 'package:app_condominio/models/user.dart';
-import 'package:app_condominio/ui/widgets/text_form_field_custom.dart';
+import 'package:app_condominio/user/ui/widgets/text_form_field_custom.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
 import 'package:app_condominio/utils/validators/validators.dart';
@@ -104,7 +104,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         iconData: Icons.assignment_ind,
                                         focusNode: registerBloc.rgFocus,
                                         nextFocusNode:
-                                            registerBloc.apartmentFocus,
+                                            registerBloc.buildingFocus,
                                         textInputAction: TextInputAction.next,
                                         maskedTextInputFormatter: [
                                           MaskedTextInputFormatter(
@@ -117,6 +117,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           )
                                         ],
                                         onChanged: registerBloc.changeRg,
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      alignment: Alignment.center,
+                                      child: TextFormFieldCustom(
+                                        labelText: "Bloco",
+                                        labelError:
+                                        "Por favor, informe o seu bloco",
+                                        iconData: Icons.store,
+                                        focusNode: registerBloc.buildingFocus,
+                                        nextFocusNode:
+                                        registerBloc.apartmentFocus,
+                                        textInputAction: TextInputAction.next,
+                                        textInputType: TextInputType.number,
+                                        onChanged: registerBloc.changeBuilding,
                                       ),
                                     ),
                                     Container(
@@ -213,9 +230,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         return () {
                                           Navigator.pushNamedAndRemoveUntil(
                                               context,
-                                              Constants.registerRoute,
+                                              Constants.loginRoute,
                                               ModalRoute.withName(
-                                                  Constants.registerRoute));
+                                                  Constants.loginRoute));
                                         };
                                         break;
                                       case "ERROR_EMAIL_ALREADY_IN_USE":

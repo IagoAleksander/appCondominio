@@ -1,6 +1,5 @@
+import 'package:app_condominio/common/ui/widgets/text_form_field_custom.dart';
 import 'package:app_condominio/user/bloc/RegisterBloc.dart';
-import 'package:app_condominio/models/user.dart';
-import 'package:app_condominio/user/ui/widgets/text_form_field_custom.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
 import 'package:app_condominio/utils/validators/validators.dart';

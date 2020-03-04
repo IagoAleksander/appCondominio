@@ -6,12 +6,13 @@ import 'package:app_condominio/utils/colors_res.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-import 'HomeScreen2.dart';
-import 'HomeScreen3.dart';
-import 'HomeScreen4.dart';
-import 'homeScreen.dart';
+import '../../../../user/ui/screens/home/HomeScreen2.dart';
+import '../../../../user/ui/screens/home/HomeScreen3.dart';
+import '../../../../user/ui/screens/home/HomeScreen4.dart';
+import '../../../../user/ui/screens/home/homeScreen.dart';
 
 class HomeScreenSelector extends StatefulWidget {
   @override
@@ -19,7 +20,11 @@ class HomeScreenSelector extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreenSelector> {
-  FirebaseUser mCurrentUser;
+  final Firestore _db = Firestore.instance;
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+
+  FirebaseUser firebaseCurrentUser;
+  User mCurrentUser;
   bool isUserAdmin = false;
   bool isClientApproved = false;
   int currentPage = 0;
@@ -27,6 +32,45 @@ class _HomeScreenState extends State<HomeScreenSelector> {
   @override
   void initState() {
     super.initState();
+    bool _isDialogShowing = false;
+
+    void _showDialog(Map<String, dynamic> message) async {
+      _isDialogShowing = true;
+      await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(message['notification']['title']),
+          content: Text(message['notification']['body']),
+          actions: <Widget>[
+            FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _isDialogShowing = false;
+                }),
+          ],
+        ),
+      ).then((val) {
+        _isDialogShowing = false;
+      });
+    }
+
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        if (!_isDialogShowing) {
+          _showDialog(message);
+        }
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        // TODO optional
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        // TODO optional
+      },
+    );
   }
 
   @override
@@ -35,27 +79,32 @@ class _HomeScreenState extends State<HomeScreenSelector> {
         stream: FirebaseAuth.instance.currentUser().asStream(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return LoadingScreen();
-          mCurrentUser = snapshot.data;
+          firebaseCurrentUser = snapshot.data;
 
           return StreamBuilder(
               stream: Firestore.instance
                   .collection('users')
-                  .document(mCurrentUser.uid)
+                  .document(firebaseCurrentUser.uid)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return LoadingScreen();
                 }
 
-                if (!snapshot.data.exists) {
-                  isUserAdmin = true;
-                } else {
-                  User user = User.fromJson(snapshot.data.data);
-                  if (user.status == Status.active)
-                    isClientApproved = true;
-                  else {
-                    isClientApproved = false;
+                if (snapshot.data.exists) {
+                  mCurrentUser = User.fromJson(snapshot.data.data);
+                  if (mCurrentUser.isAdmin) {
+                    isUserAdmin = true;
+                  } else {
+                    if (mCurrentUser.status == Status.active)
+                      isClientApproved = true;
+                    else {
+                      isClientApproved = false;
+                    }
                   }
+                  _setUserNotificationToken();
+                } else {
+                  //TODO
                 }
 
                 return Scaffold(
@@ -120,5 +169,20 @@ class _HomeScreenState extends State<HomeScreenSelector> {
       }
     }
     return HomeScreen();
+  }
+
+  _setUserNotificationToken() async {
+    // Get the token for this device
+    String fcmToken = await _fcm.getToken();
+
+    if (fcmToken != null) {
+      print(fcmToken);
+      mCurrentUser.notificationToken = fcmToken;
+
+      _db
+          .collection('users')
+          .document(firebaseCurrentUser.uid)
+          .setData(mCurrentUser.toJson());
+    }
   }
 }

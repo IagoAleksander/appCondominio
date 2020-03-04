@@ -9,6 +9,8 @@ class User {
   final String apartment;
   final String password;
   Status status;
+  String notificationToken;
+  bool isAdmin = false;
 
   User(
       {this.id,
@@ -18,7 +20,9 @@ class User {
       this.building,
       this.apartment,
       this.password,
-      this.status});
+      this.status,
+      this.notificationToken,
+      this.isAdmin});
 
   Map<String, dynamic> toJson() => {
         'name': name,
@@ -27,7 +31,9 @@ class User {
         'building': building,
         'apartment': apartment,
         'password': password,
-        'status': status.toString()
+        'status': status.toString(),
+        'notificationToken': notificationToken,
+        'isAdmin': isAdmin
       };
 
   static fromJson(Map<String, dynamic> parsedJson) {
@@ -39,7 +45,9 @@ class User {
         building: parsedJson['building'],
         apartment: parsedJson['apartment'],
         password: parsedJson['password'],
-        status: statusFromString(parsedJson['status']));
+        status: statusFromString(parsedJson['status']),
+        notificationToken: parsedJson['notificationToken'],
+        isAdmin: parsedJson['isAdmin']);
   }
 
   static Status statusFromString(String status) {

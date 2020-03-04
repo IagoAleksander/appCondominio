@@ -1,6 +1,6 @@
-import 'package:app_condominio/user/ui/screens/home/homeScreenSelector.dart';
-import 'package:app_condominio/user/ui/screens/login/loginScreen.dart';
-import 'package:app_condominio/user/ui/screens/register/registerScreen.dart';
+import 'package:app_condominio/common/ui/screens/home/homeScreenSelector.dart';
+import 'package:app_condominio/common/ui/screens/login/loginScreen.dart';
+import 'package:app_condominio/common/ui/screens/register/registerScreen.dart';
 import 'package:app_condominio/user/ui/screens/visitorsCentre/visitorsCentreScreen.dart';
 import 'package:flutter/material.dart';
 

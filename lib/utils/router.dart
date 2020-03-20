@@ -1,6 +1,9 @@
+import 'package:app_condominio/admin/visitorsCentre/visitorsCentreAdminScreen.dart';
 import 'package:app_condominio/common/ui/screens/home/homeScreenSelector.dart';
 import 'package:app_condominio/common/ui/screens/login/loginScreen.dart';
 import 'package:app_condominio/common/ui/screens/register/registerScreen.dart';
+import 'package:app_condominio/models/visitor.dart';
+import 'package:app_condominio/user/ui/screens/registerVisitor/registerVisitorScreen.dart';
 import 'package:app_condominio/user/ui/screens/visitorsCentre/visitorsCentreScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +19,13 @@ class Router {
       case Constants.homeRoute:
         return MaterialPageRoute(builder: (_) => HomeScreenSelector());
       case Constants.visitorsCentreRoute:
-        return MaterialPageRoute(builder: (_) => VisitorsCentreScreen());
+        var visitor = settings.arguments as Visitor;
+        return MaterialPageRoute(builder: (_) => VisitorsCentreScreen(visitor));
+      case Constants.registerVisitorRoute:
+        var visitor = settings.arguments as Visitor;
+        return MaterialPageRoute(builder: (_) => RegisterVisitorScreen(visitor));
+      case Constants.visitorsCentreAdminRoute:
+        return MaterialPageRoute(builder: (_) => VisitorsCentreAdminScreen());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

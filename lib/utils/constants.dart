@@ -6,6 +6,8 @@ class Constants {
   static const String registerRoute = '/register';
   static const String homeRoute = '/home';
   static const String visitorsCentreRoute = '/visitorsCentre';
+  static const String registerVisitorRoute = '/registerVisitor';
+  static const String visitorsCentreAdminRoute = '/visitorsCentreAdmin';
 
   static const LOGIN = "Login";
   static const PASSWORD = "Senha";

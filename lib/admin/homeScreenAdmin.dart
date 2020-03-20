@@ -49,7 +49,7 @@ class HomeScreenAdmin extends StatelessWidget {
                           iconData: Icons.people,
                           onTapFunction: () {
                             Navigator.pushNamed(
-                                context, Constants.visitorsCentreRoute);
+                                context, Constants.visitorsCentreAdminRoute);
                           },
                         ),
                         SizedBox(

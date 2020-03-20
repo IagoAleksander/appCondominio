@@ -17,6 +17,8 @@ class TextFormFieldCustom extends StatelessWidget {
   final Function validator;
   final bool obscureText;
   final bool isError;
+  final TextEditingController controller;
+  final bool isOptional;
 
   TextFormFieldCustom(
       {@required this.labelText,
@@ -30,11 +32,14 @@ class TextFormFieldCustom extends StatelessWidget {
       this.onChanged,
       this.validator = LoginValidators.validateNotEmpty,
       this.obscureText = false,
-      this.isError = false});
+      this.isError = false,
+      this.controller,
+      this.isOptional = false});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       textInputAction: textInputAction,
       focusNode: focusNode,
       onFieldSubmitted: (term) {
@@ -76,7 +81,9 @@ class TextFormFieldCustom extends StatelessWidget {
       ),
       keyboardType: textInputType,
       validator: (value) {
-        return isError ? labelError : validator(value, labelError);
+        return !isOptional
+            ? isError ? labelError : validator(value, labelError)
+            : null;
       },
       inputFormatters:
           maskedTextInputFormatter != null ? maskedTextInputFormatter : [],

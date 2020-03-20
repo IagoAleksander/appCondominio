@@ -47,7 +47,10 @@ class HomeScreen extends StatelessWidget {
                         OptionHomeItem(
                           labelText: "Centro de Visitantes",
                           iconData: Icons.people,
-                          onTapFunction: () {},
+                          onTapFunction: () {
+                            Navigator.pushNamed(
+                                context, Constants.visitorsCentreRoute);
+                          },
                         ),
                         SizedBox(
                           width: 40,

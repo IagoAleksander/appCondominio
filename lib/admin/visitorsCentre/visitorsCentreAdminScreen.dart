@@ -5,12 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 
-class VisitorsCentreScreen extends StatefulWidget {
+class VisitorsCentreAdminScreen extends StatefulWidget {
   @override
-  _VisitorsCentreScreenState createState() => _VisitorsCentreScreenState();
+  _VisitorsCentreAdminScreenState createState() => _VisitorsCentreAdminScreenState();
 }
 
-class _VisitorsCentreScreenState extends State<VisitorsCentreScreen> {
+class _VisitorsCentreAdminScreenState extends State<VisitorsCentreAdminScreen> {
   int currentPage = 0;
 
   @override
@@ -47,6 +47,8 @@ class _VisitorsCentreScreenState extends State<VisitorsCentreScreen> {
                 child: StreamBuilder(
                     stream: Firestore.instance
                         .collection('users')
+                        .where("status",
+                        isEqualTo: (Status.pendingApproval.toString()))
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData ||
@@ -54,10 +56,10 @@ class _VisitorsCentreScreenState extends State<VisitorsCentreScreen> {
                         return Container(
                             child: Center(
                                 child: Text(
-                          "Não há cadastros\naguardando aprovação",
-                          style: TextStyle(color: Colors.white, fontSize: 24),
-                          textAlign: TextAlign.center,
-                        )));
+                                  "Não há cadastros\naguardando aprovação",
+                                  style: TextStyle(color: Colors.white, fontSize: 24),
+                                  textAlign: TextAlign.center,
+                                )));
                       }
 
                       return ListView.builder(
@@ -73,12 +75,8 @@ class _VisitorsCentreScreenState extends State<VisitorsCentreScreen> {
                               apartmentNumber: user.apartment,
                               buildingNumber: user.building,
                               onTapFunction: () {
-                                user.status = Status.active;
-                                Firestore.instance
-                                    .collection('users')
-                                    .document(snapshot
-                                        .data.documents[index].documentID)
-                                    .setData(user.toJson());
+                                showAlertDialog(context, user,
+                                    snapshot.data.documents[index].documentID);
                               },
                             );
                           });
@@ -88,6 +86,43 @@ class _VisitorsCentreScreenState extends State<VisitorsCentreScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  static showAlertDialog(BuildContext context, User user, String userID) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancelar"),
+      onPressed: () => Navigator.pop(context),
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Continuar"),
+      onPressed: () {
+        user.status = Status.active;
+        Firestore.instance
+            .collection('users')
+            .document(userID)
+            .setData(user.toJson());
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text(
+          "Você tem certeza de que deseja liberar o acesso para ${user.name} ?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

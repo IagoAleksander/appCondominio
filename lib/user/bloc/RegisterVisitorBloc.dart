@@ -183,7 +183,7 @@ class RegisterVisitorBloc extends Bloc<GeneralBlocState, GeneralBlocState>
         registeredBy: currentUser.uid,
         isLiberated: visitor.isLiberated == null ? false : visitor.isLiberated,
       );
-      visitorSubject.add(visitor);
+      visitorSubject.add(newVisitor);
 
       Firestore.instance
           .collection('visitors')

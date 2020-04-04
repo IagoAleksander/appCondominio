@@ -10,7 +10,7 @@ class User {
   final String password;
   Status status;
   String notificationToken;
-  bool isAdmin = false;
+  bool isAdmin;
 
   User(
       {this.id,
@@ -22,7 +22,7 @@ class User {
       this.password,
       this.status,
       this.notificationToken,
-      this.isAdmin});
+      this.isAdmin = false});
 
   Map<String, dynamic> toJson() => {
         'name': name,

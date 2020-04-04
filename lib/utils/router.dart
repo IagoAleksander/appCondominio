@@ -1,4 +1,4 @@
-import 'package:app_condominio/admin/visitorsCentre/visitorsCentreAdminScreen.dart';
+import 'package:app_condominio/admin/ui/visitorsCentre/visitorsCentreAdminScreen.dart';
 import 'package:app_condominio/common/ui/screens/home/homeScreenSelector.dart';
 import 'package:app_condominio/common/ui/screens/login/loginScreen.dart';
 import 'package:app_condominio/common/ui/screens/register/registerScreen.dart';

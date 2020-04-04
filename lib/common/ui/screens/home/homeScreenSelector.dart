@@ -1,4 +1,4 @@
-import 'package:app_condominio/admin/homeScreenAdmin.dart';
+import 'package:app_condominio/admin/ui/homeScreenAdmin.dart';
 import 'package:app_condominio/common/ui/screens/loadingScreen.dart';
 import 'package:app_condominio/common/ui/screens/waitingApprovalScreen.dart';
 import 'package:app_condominio/models/user.dart';
@@ -13,6 +13,7 @@ import '../../../../user/ui/screens/home/HomeScreen2.dart';
 import '../../../../user/ui/screens/home/HomeScreen3.dart';
 import '../../../../user/ui/screens/home/HomeScreen4.dart';
 import '../../../../user/ui/screens/home/homeScreen.dart';
+import '../../../../utils/globals.dart' as globals;
 
 class HomeScreenSelector extends StatefulWidget {
   @override
@@ -23,9 +24,7 @@ class _HomeScreenState extends State<HomeScreenSelector> {
   final Firestore _db = Firestore.instance;
   final FirebaseMessaging _fcm = FirebaseMessaging();
 
-  FirebaseUser firebaseCurrentUser;
   User mCurrentUser;
-  bool isUserAdmin = false;
   bool isClientApproved = false;
   int currentPage = 0;
 
@@ -79,12 +78,12 @@ class _HomeScreenState extends State<HomeScreenSelector> {
         stream: FirebaseAuth.instance.currentUser().asStream(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return LoadingScreen();
-          firebaseCurrentUser = snapshot.data;
+          globals.firebaseCurrentUser = snapshot.data;
 
           return StreamBuilder(
               stream: Firestore.instance
                   .collection('users')
-                  .document(firebaseCurrentUser.uid)
+                  .document(globals.firebaseCurrentUser.uid)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
@@ -94,7 +93,7 @@ class _HomeScreenState extends State<HomeScreenSelector> {
                 if (snapshot.data.exists) {
                   mCurrentUser = User.fromJson(snapshot.data.data);
                   if (mCurrentUser.isAdmin) {
-                    isUserAdmin = true;
+                    globals.isUserAdmin = true;
                   } else {
                     if (mCurrentUser.status == Status.active)
                       isClientApproved = true;
@@ -109,7 +108,7 @@ class _HomeScreenState extends State<HomeScreenSelector> {
 
                 return Scaffold(
                   backgroundColor: ColorsRes.primaryColor,
-                  body: isUserAdmin
+                  body: globals.isUserAdmin
                       ? returnPage(currentPage)
                       : !isClientApproved
                           ? WaitingApprovalScreen()
@@ -145,7 +144,7 @@ class _HomeScreenState extends State<HomeScreenSelector> {
   }
 
   Widget returnPage(int page) {
-    if (isUserAdmin) {
+    if (globals.isUserAdmin) {
       switch (page) {
         case 0:
           return HomeScreenAdmin();
@@ -181,7 +180,7 @@ class _HomeScreenState extends State<HomeScreenSelector> {
 
       _db
           .collection('users')
-          .document(firebaseCurrentUser.uid)
+          .document(globals.firebaseCurrentUser.uid)
           .setData(mCurrentUser.toJson());
     }
   }

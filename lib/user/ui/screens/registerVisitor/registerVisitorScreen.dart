@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:app_condominio/common/ui/widgets/text_form_field_custom.dart';
@@ -48,9 +49,8 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
     _phoneFieldController = TextEditingController(
         text: widget.visitor != null
             ? widget.visitor.phoneNumber != null
-            ? '(${phone.substring(0, 2)})${phone.substring(2, 7)}-${phone
-            .substring(7)}'
-            : null
+                ? '(${phone.substring(0, 2)})${phone.substring(2, 7)}-${phone.substring(7)}'
+                : null
             : null);
 
     super.initState();
@@ -112,12 +112,12 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                         labelText: "Nome",
                                         iconData: Icons.account_circle,
                                         focusNode:
-                                        registerVisitorBloc.nameFocus,
+                                            registerVisitorBloc.nameFocus,
                                         nextFocusNode:
-                                        registerVisitorBloc.rgFocus,
+                                            registerVisitorBloc.rgFocus,
                                         textInputAction: TextInputAction.next,
                                         onChanged:
-                                        registerVisitorBloc.changeName,
+                                            registerVisitorBloc.changeName,
                                       ),
                                     ),
                                     Container(
@@ -133,7 +133,7 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                         iconData: Icons.assignment_ind,
                                         focusNode: registerVisitorBloc.rgFocus,
                                         nextFocusNode:
-                                        registerVisitorBloc.phoneFocus,
+                                            registerVisitorBloc.phoneFocus,
                                         textInputAction: TextInputAction.next,
                                         maskedTextInputFormatter: [
                                           MaskedTextInputFormatter(
@@ -158,7 +158,7 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                         labelText: "Celular (opcional)",
                                         iconData: Icons.phone_android,
                                         focusNode:
-                                        registerVisitorBloc.phoneFocus,
+                                            registerVisitorBloc.phoneFocus,
                                         textInputAction: TextInputAction.done,
                                         maskedTextInputFormatter: [
                                           MaskedTextInputFormatter(
@@ -176,7 +176,7 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                         ],
                                         textInputType: TextInputType.phone,
                                         onChanged:
-                                        registerVisitorBloc.changePhone,
+                                            registerVisitorBloc.changePhone,
                                         isOptional: true,
                                       ),
                                     ),
@@ -199,94 +199,94 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                         ),
                                         !_hasImage
                                             ? Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 16.0),
-                                          child: ProgressButton(
-                                              color:
-                                              ColorsRes.primaryColor,
-                                              borderRadius: 90.0,
-                                              defaultWidget: Text(
-                                                "BUSCAR FOTO",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                              progressWidget:
-                                              const CircularProgressIndicator(
-                                                strokeWidth: 4,
-                                                backgroundColor:
-                                                ColorsRes.accentColor,
-                                                valueColor:
-                                                const AlwaysStoppedAnimation<
-                                                    Color>(
-                                                    Colors.white),
-                                              ),
-                                              width: 160,
-                                              // ignore: missing_return
-                                              onPressed: () =>
-                                              chooseFile),
-                                        )
+                                                padding: const EdgeInsets.only(
+                                                    top: 16.0),
+                                                child: ProgressButton(
+                                                    color:
+                                                        ColorsRes.primaryColor,
+                                                    borderRadius: 90.0,
+                                                    defaultWidget: Text(
+                                                      "BUSCAR FOTO",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                    progressWidget:
+                                                        const CircularProgressIndicator(
+                                                      strokeWidth: 4,
+                                                      backgroundColor:
+                                                          ColorsRes.accentColor,
+                                                      valueColor:
+                                                          const AlwaysStoppedAnimation<
+                                                                  Color>(
+                                                              Colors.white),
+                                                    ),
+                                                    width: 160,
+                                                    // ignore: missing_return
+                                                    onPressed: () =>
+                                                        chooseFile),
+                                              )
                                             : Container(),
                                         registerVisitorBloc
-                                            .rgFileSubject.value !=
-                                            null
+                                                    .rgFileSubject.value !=
+                                                null
                                             ? _hasImage
-                                            ? Padding(
-                                          padding:
-                                          const EdgeInsets.only(
-                                              top: 10.0),
-                                          child: Image.file(
-                                            registerVisitorBloc
-                                                .rgFileSubject.value,
-                                            height: 250,
-                                          ),
-                                        )
-                                            : Container()
+                                                ? Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 10.0),
+                                                    child: Image.file(
+                                                      registerVisitorBloc
+                                                          .rgFileSubject.value,
+                                                      height: 250,
+                                                    ),
+                                                  )
+                                                : Container()
                                             : widget.visitor != null &&
-                                            widget.visitor.rgUrl != null
-                                            ? Image.network(
-                                          widget.visitor.rgUrl,
-                                          height: 150,
-                                        )
+                                                    widget.visitor.rgUrl != null
+                                                ? Image.network(
+                                                    widget.visitor.rgUrl,
+                                                    height: 150,
+                                                  )
+                                                : Container(),
+                                        _hasImage
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 20.0),
+                                                child: Text(
+                                                  '(Caso a foto escolhida não corresponda ao RG cadastrado ou não esteja '
+                                                  'com as informações visíveis, consequente multa poderá ser aplicada)',
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              )
                                             : Container(),
                                         _hasImage
                                             ? Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 20.0),
-                                          child: Text(
-                                            '(Caso a foto escolhida não corresponda ao RG cadastrado ou não esteja '
-                                                'com as informações visíveis, consequente multa poderá ser aplicada)',
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        )
-                                            : Container(),
-                                        _hasImage
-                                            ? Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 24.0),
-                                          child: ProgressButton(
-                                              color:
-                                              ColorsRes.primaryColor,
-                                              borderRadius: 90.0,
-                                              defaultWidget: Text(
-                                                "TROCAR FOTO",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                              progressWidget:
-                                              const CircularProgressIndicator(
-                                                strokeWidth: 4,
-                                                backgroundColor:
-                                                ColorsRes.accentColor,
-                                                valueColor:
-                                                const AlwaysStoppedAnimation<
-                                                    Color>(
-                                                    Colors.white),
-                                              ),
-                                              width: 160,
-                                              // ignore: missing_return
-                                              onPressed: () =>
-                                              chooseFile),
-                                        )
+                                                padding: const EdgeInsets.only(
+                                                    top: 24.0),
+                                                child: ProgressButton(
+                                                    color:
+                                                        ColorsRes.primaryColor,
+                                                    borderRadius: 90.0,
+                                                    defaultWidget: Text(
+                                                      "TROCAR FOTO",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                    progressWidget:
+                                                        const CircularProgressIndicator(
+                                                      strokeWidth: 4,
+                                                      backgroundColor:
+                                                          ColorsRes.accentColor,
+                                                      valueColor:
+                                                          const AlwaysStoppedAnimation<
+                                                                  Color>(
+                                                              Colors.white),
+                                                    ),
+                                                    width: 160,
+                                                    // ignore: missing_return
+                                                    onPressed: () =>
+                                                        chooseFile),
+                                              )
                                             : Container(),
                                         Padding(
                                           padding: const EdgeInsets.only(
@@ -302,13 +302,13 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                                   color: Colors.white),
                                             ),
                                             progressWidget:
-                                            const CircularProgressIndicator(
+                                                const CircularProgressIndicator(
                                               strokeWidth: 4,
                                               backgroundColor:
-                                              ColorsRes.accentColor,
+                                                  ColorsRes.accentColor,
                                               valueColor:
-                                              const AlwaysStoppedAnimation<
-                                                  Color>(Colors.white),
+                                                  const AlwaysStoppedAnimation<
+                                                      Color>(Colors.white),
                                             ),
                                             width: 160,
                                             // ignore: missing_return
@@ -317,33 +317,46 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                                   .validate()) {
                                                 setState(() {
                                                   _imageNotSelectedError =
-                                                  !_hasImage;
+                                                      !_hasImage;
                                                 });
 
                                                 String result;
                                                 if (widget.visitor == null) {
                                                   Scaffold.of(context)
                                                       .showSnackBar(SnackBar(
-                                                      content: Text(
-                                                          'Registrando visitante')));
+                                                          content: Text(
+                                                              'Registrando visitante')));
 
                                                   result =
-                                                  await registerVisitorBloc
-                                                      .saveVisitor();
+                                                      await registerVisitorBloc
+                                                          .saveVisitor();
                                                 } else {
                                                   Scaffold.of(context)
                                                       .showSnackBar(SnackBar(
-                                                      content: Text(
-                                                          'Atualizando visitante')));
+                                                          content: Text(
+                                                              'Atualizando visitante')));
 
                                                   result =
-                                                  await registerVisitorBloc
-                                                      .updateVisitor();
+                                                      await registerVisitorBloc
+                                                          .updateVisitor();
                                                 }
 
+                                                Scaffold.of(context)
+                                                    .hideCurrentSnackBar();
                                                 switch (result) {
                                                   case "SUCCESS":
-                                                    return () {
+                                                    Scaffold.of(context)
+                                                        .showSnackBar(SnackBar(
+                                                            content: Text(widget
+                                                                        .visitor ==
+                                                                    null
+                                                                ? 'Visitante registrado com sucesso'
+                                                                : 'Visitante atualizado com sucesso')));
+
+                                                    Timer(
+                                                        Duration(
+                                                            milliseconds: 1500),
+                                                        () {
                                                       Navigator
                                                           .pushNamedAndRemoveUntil(
                                                         context,
@@ -353,11 +366,11 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                                             Constants
                                                                 .visitorsCentreRoute),
                                                         arguments:
-                                                        registerVisitorBloc
-                                                            .visitorSubject
-                                                            .value,
+                                                            registerVisitorBloc
+                                                                .visitorSubject
+                                                                .value,
                                                       );
-                                                    };
+                                                    });
                                                     break;
                                                   case "ERROR_DOC_ALREADY_IN_USE":
                                                     setState(() {
@@ -367,16 +380,26 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                                   case "ERROR_NOTHING_CHANGE":
                                                     Scaffold.of(context)
                                                         .showSnackBar(SnackBar(
-                                                        content: Text(
-                                                            'Nada a atualizar')));
-                                                    Navigator.pop(context);
+                                                            content: Text(
+                                                                'Nada a atualizar')));
+                                                    Timer(
+                                                        Duration(
+                                                            milliseconds: 1500),
+                                                        () {
+                                                      Navigator.pop(context);
+                                                    });
                                                     break;
                                                   default:
                                                     Scaffold.of(context)
                                                         .showSnackBar(SnackBar(
-                                                        content: Text(
-                                                            'Erro no registro de visitante')));
-                                                    Navigator.pop(context);
+                                                            content: Text(
+                                                                'Erro no registro de visitante')));
+                                                    Timer(
+                                                        Duration(
+                                                            milliseconds: 1500),
+                                                        () {
+                                                      Navigator.pop(context);
+                                                    });
                                                     break;
                                                 }
                                               } else {

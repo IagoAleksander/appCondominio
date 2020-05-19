@@ -45,20 +45,23 @@ class HomeScreenAdmin extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         OptionHomeItem(
-                          labelText: "Centro de Visitantes",
+                          labelText: "Centro de Moradores",
                           iconData: Icons.people,
                           onTapFunction: () {
                             Navigator.pushNamed(
-                                context, Constants.visitorsCentreAdminRoute);
+                                context, Constants.residentsCentreRoute);
                           },
                         ),
                         SizedBox(
                           width: 40,
                         ),
                         OptionHomeItem(
-                          labelText: "Enviar Localização",
-                          iconData: Icons.location_on,
-                          onTapFunction: () {},
+                          labelText: "Centro de Visitantes",
+                          iconData: Icons.people,
+                          onTapFunction: () {
+                            Navigator.pushNamed(
+                                context, Constants.visitorsCentreAdminRoute);
+                          },
                         ),
                       ],
                     ),

@@ -2,8 +2,11 @@ library two_letter_icon;
 
 import 'dart:math';
 
+import 'package:app_condominio/common/ui/screens/login/widgets/LoadingIndicator.dart';
+import 'package:app_condominio/common/ui/screens/visitorsCentre/widgets/profile_rule_option_radio.dart';
 import 'package:app_condominio/common/ui/widgets/dialogs.dart';
 import 'package:app_condominio/models/access_code.dart';
+import 'package:app_condominio/models/profile_rule.dart';
 import 'package:app_condominio/models/user.dart';
 import 'package:app_condominio/models/visitor.dart';
 import 'package:app_condominio/common/ui/screens/visitorsCentre/widgets/two_letter_icon.dart';
@@ -24,7 +27,7 @@ class VisitorDetailsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 380,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
@@ -59,7 +62,9 @@ class VisitorDetailsDialog extends StatelessWidget {
             style: TextStyle(color: Colors.white),
             textAlign: TextAlign.center,
           ),
-          Spacer(),
+          Spacer(
+            flex: 3,
+          ),
           new InkWell(
             onTap: () {
               Navigator.pushNamed(context, Constants.registerVisitorRoute,
@@ -164,7 +169,7 @@ class VisitorDetailsDialog extends StatelessWidget {
                                   User user = User.fromJson(snapshot.data.data);
 
                                   return Container(
-                                    padding: EdgeInsets.only(top: 6),
+                                    padding: EdgeInsets.only(top: 6, bottom: 10),
                                     child: Text(
                                       user.name,
                                       style: TextStyle(color: Colors.white),
@@ -175,8 +180,41 @@ class VisitorDetailsDialog extends StatelessWidget {
                               ),
                             ],
                           ),
+                    StreamBuilder(
+                      stream: Firestore.instance
+                          .collection('profileRules')
+                          .document(visitor.accessCode.profileRuleId)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Container(
+                            padding: EdgeInsets.only(top: 6),
+                            child: Text(
+                              "(Carregando...)",
+                              style: TextStyle(color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+                        }
+
+                        ProfileRule rule =
+                            ProfileRule.fromJson(snapshot.data.data);
+
+                        return Container(
+                          padding: EdgeInsets.only(top: 6),
+                          child: Text(
+                            rule.title,
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
+          Spacer(
+            flex: 1,
+          ),
         ],
       ),
     );
@@ -203,6 +241,7 @@ class VisitorDetailsDialog extends StatelessWidget {
         visitor.accessCode = AccessCode.fromJson(snapshot.documents[0].data);
         isResponsableUser = visitor.accessCode.createdBy == currentUser.uid;
       } else {
+        Navigator.pop(context);
         return Future.value("ERROR");
       }
     }
@@ -256,7 +295,7 @@ class VisitorDetailsDialog extends StatelessWidget {
     Future<String> status;
     int _radioValue = -1;
     bool errorNoRadioSelected = false;
-    ProfileType profileType;
+    ProfileRule profileRule;
 // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text(
@@ -282,7 +321,7 @@ class VisitorDetailsDialog extends StatelessWidget {
                   unselectedWidgetColor: Colors.white),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
+                children: [
                   Text(
                     "Escolha um perfil para o acesso do visitante",
                     style: TextStyle(
@@ -292,106 +331,64 @@ class VisitorDetailsDialog extends StatelessWidget {
                   SizedBox(
                     height: 30,
                   ),
-                  Row(
-                    children: <Widget>[
-                      Radio(
-                        value: 0,
-                        groupValue: _radioValue,
-                        onChanged: (value) {
-                          setState(() {
-                            profileType = ProfileType.unique;
-                            _radioValue = value;
-                          });
-                        },
-                        activeColor: ColorsRes.accentColor,
-                        focusColor: ColorsRes.accentColor,
-                      ),
-                      new GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            profileType = ProfileType.unique;
-                            _radioValue = 0;
-                          });
-                        },
-                        child: Flexible(
-                          child: Text(
-                            'Visita Única\n12 horas de acesso',
-                            style: new TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.white,
-                            ),
-                          ),
+                  StreamBuilder(
+                    stream: Firestore.instance
+                        .collection('profileRules')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData ||
+                          snapshot.data.documents.length == 0) {
+                        return Container(
+                            child: Center(
+                                child: Text(
+                          "Não há regras de\nperfis cadastradas",
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                          textAlign: TextAlign.center,
+                        )));
+                      }
+
+                      return Container(
+                        width: 300,
+                        height: 300,
+                        child: ListView.builder(
+                          reverse: false,
+                          itemCount: snapshot.data.documents.length,
+                          itemBuilder: (_, int index) {
+                            ProfileRule rule = ProfileRule.fromJson(
+                                snapshot.data.documents[index].data);
+                            rule.id = snapshot.data.documents[index].documentID;
+                            return Column(
+                              children: [
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                ProfileRuleOptionRadio(
+                                    text: rule.title +
+                                        "\n" +
+                                        rule.value.toString() +
+                                        " " +
+                                        rule.unit +
+                                        " de acesso",
+                                    onChangeFunction: (value) {
+                                      setState(() {
+                                        profileRule = rule;
+                                        _radioValue = value;
+                                      });
+                                    },
+                                    onTapFunction: () {
+                                      setState(() {
+                                        profileRule = rule;
+                                        _radioValue = index;
+                                      });
+                                    },
+                                    radioValue: index,
+                                    groupValue: _radioValue),
+                              ],
+                            );
+                          },
                         ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Radio(
-                        value: 1,
-                        groupValue: _radioValue,
-                        onChanged: (value) {
-                          setState(() {
-                            profileType = ProfileType.serviceProvider;
-                            _radioValue = value;
-                          });
-                        },
-                      ),
-                      new GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            profileType = ProfileType.unique;
-                            _radioValue = 1;
-                          });
-                        },
-                        child: Flexible(
-                          child: Text(
-                            'Prestador de Serviços\n12 horas de acesso',
-                            style: new TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Radio(
-                        value: 2,
-                        groupValue: _radioValue,
-                        onChanged: (value) {
-                          setState(() {
-                            profileType = ProfileType.family;
-                            _radioValue = value;
-                          });
-                        },
-                      ),
-                      new GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            profileType = ProfileType.unique;
-                            _radioValue = 2;
-                          });
-                        },
-                        child: Flexible(
-                          child: Text(
-                            'Família\n7 dias de acesso',
-                            style: new TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
+                      );
+                    },
                   ),
                 ],
               ),
@@ -411,7 +408,7 @@ class VisitorDetailsDialog extends StatelessWidget {
                     });
                   } else {
                     status = showReleaseAlertDialog(
-                        context, visitor, currentUserId, profileType);
+                        context, visitor, currentUserId, profileRule);
                   }
                 },
               ),
@@ -425,7 +422,7 @@ class VisitorDetailsDialog extends StatelessWidget {
   }
 
   static Future<String> showReleaseAlertDialog(BuildContext context,
-      Visitor visitor, String currentUserId, ProfileType profileType) async {
+      Visitor visitor, String currentUserId, ProfileRule profileRule) async {
     String status;
 // set up the buttons
     Widget cancelButton = FlatButton(
@@ -465,7 +462,7 @@ class VisitorDetailsDialog extends StatelessWidget {
 
         AccessCode accessCode = new AccessCode();
         accessCode.accessCodeNumber = code;
-        accessCode.profileType = profileType;
+        accessCode.profileRuleId = profileRule.id;
         accessCode.createdBy = currentUser.uid;
         accessCode.createdTo = visitor.rg;
         accessCode.isActive = true;
@@ -495,7 +492,7 @@ class VisitorDetailsDialog extends StatelessWidget {
     AlertDialog alert = AlertDialog(
       backgroundColor: ColorsRes.primaryColorLight,
       content: Text(
-        "Você tem certeza de que deseja liberar o acesso de tipo ${AccessCode.profileTypeToString(profileType)} para ${visitor.name} ?",
+        "Você tem certeza de que deseja liberar o acesso de tipo ${profileRule.title} para ${visitor.name} ?",
         style: TextStyle(color: Colors.white),
       ),
       actions: [

@@ -1,4 +1,5 @@
 import 'package:app_condominio/common/bloc/visitorsLiberatedPageBloc.dart';
+import 'package:app_condominio/common/ui/screens/login/widgets/LoadingIndicator.dart';
 import 'package:app_condominio/models/visitor.dart';
 import 'package:app_condominio/common/ui/screens/visitorsCentre/widgets/visitor_card.dart';
 import 'package:app_condominio/common/ui/screens/visitorsCentre/widgets/visitor_details_dialog.dart';
@@ -30,6 +31,9 @@ class _VisitorsLiberatedPageState extends State<VisitorsLiberatedPage> {
             child: StreamBuilder(
               stream: widget.visitorsLiberatedPageBloc.streamHistory,
               builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return LoadingIndicator();
+                }
                 if (!snapshot.hasData || snapshot.data.length == 0) {
                   return LayoutBuilder(
                     builder: (context, constraint) {
@@ -75,6 +79,10 @@ class _VisitorsLiberatedPageState extends State<VisitorsLiberatedPage> {
                             });
                             break;
                           case "ERROR":
+                            Scaffold.of(context).hideCurrentSnackBar();
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    'Erro ao obter informações do visitante')));
                             break;
                           case "CANCEL":
                             break;

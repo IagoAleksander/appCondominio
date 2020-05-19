@@ -149,6 +149,10 @@ class _VisitorsSearchPageState extends State<VisitorsSearchPage> {
                               widget.notifyParent(visitor);
                               break;
                             case "ERROR":
+                              Scaffold.of(context).hideCurrentSnackBar();
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text(
+                                      'Erro ao obter informações do visitante')));
                               break;
                             case "CANCEL":
                               break;

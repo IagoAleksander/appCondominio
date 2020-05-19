@@ -19,6 +19,7 @@ class WaitingApprovalCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 8.0,
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: Container(
@@ -36,7 +37,7 @@ class WaitingApprovalCard extends StatelessWidget {
               SizedBox(
                 height: 4,
               ),
-              Text(rgNumber ,
+              Text(rgNumber,
                   textAlign: TextAlign.left,
                   style: TextStyle(color: Colors.white)),
               SizedBox(

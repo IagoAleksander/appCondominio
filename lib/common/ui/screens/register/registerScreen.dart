@@ -48,6 +48,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Padding(
                       padding: const EdgeInsets.all(24.0),
                       child: Card(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
                         color: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0),

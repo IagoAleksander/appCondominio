@@ -6,6 +6,7 @@ import 'package:masked_text_input_formatter/masked_text_input_formatter.dart';
 
 class TextFormFieldCustom extends StatelessWidget {
   final String labelText;
+  final String hintText;
   final String labelError;
   final FocusNode focusNode;
   final FocusNode nextFocusNode;
@@ -21,7 +22,8 @@ class TextFormFieldCustom extends StatelessWidget {
   final bool isOptional;
 
   TextFormFieldCustom(
-      {@required this.labelText,
+      {this.labelText,
+      this.hintText,
       this.labelError = "Preencha corretamente o campo",
       @required this.iconData,
       this.focusNode,
@@ -69,15 +71,18 @@ class TextFormFieldCustom extends StatelessWidget {
         errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(90.0)),
             borderSide: BorderSide(color: Colors.deepOrange, width: 1)),
-        prefixIcon: new Icon(
-          iconData,
-          color: Colors.grey[600],
-        ),
+        prefixIcon: iconData != null
+            ? new Icon(
+                iconData,
+                color: Colors.grey[600],
+              )
+            : null,
         errorStyle: TextStyle(
           color: Colors.deepOrange,
         ),
         contentPadding:
-            new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+            new EdgeInsets.symmetric(vertical: 15.0, horizontal: iconData != null ? 10.0 : 20.0),
+        hintText: hintText,
       ),
       keyboardType: textInputType,
       validator: (value) {

@@ -1,9 +1,9 @@
-enum ProfileType { unique, serviceProvider, family, undefined }
+import 'package:app_condominio/models/profile_rule.dart';
 
 class AccessCode {
   final int id;
   String accessCodeNumber;
-  ProfileType profileType;
+  String profileRuleId;
   String createdBy;
   int creationDateInMillis;
   String createdTo;
@@ -12,7 +12,7 @@ class AccessCode {
   AccessCode(
       {this.id,
       this.accessCodeNumber,
-      this.profileType,
+      this.profileRuleId,
       this.createdBy,
       this.creationDateInMillis,
       this.createdTo,
@@ -20,7 +20,7 @@ class AccessCode {
 
   Map<String, dynamic> toJson() => {
         'accessCodeNumber': accessCodeNumber,
-        'profileType': profileType.toString(),
+        'profileRuleId': profileRuleId,
         'createdBy': createdBy,
         'creationDateInMillis': creationDateInMillis,
         'createdTo': createdTo,
@@ -31,37 +31,11 @@ class AccessCode {
     return AccessCode(
       id: parsedJson['id'],
       accessCodeNumber: parsedJson['accessCodeNumber'],
-      profileType: profileTypeFromString(parsedJson['profileType']),
+      profileRuleId: parsedJson['profileRuleId'],
       createdBy: parsedJson['createdBy'],
       creationDateInMillis: parsedJson['creationDateInMillis'],
       createdTo: parsedJson['createdTo'],
       isActive: parsedJson['isActive'],
     );
-  }
-
-  static ProfileType profileTypeFromString(String profileType) {
-    switch (profileType) {
-      case "ProfileType.unique":
-        return ProfileType.unique;
-      case "ProfileType.serviceProvider":
-        return ProfileType.serviceProvider;
-      case "ProfileType.family":
-        return ProfileType.family;
-      default:
-        return ProfileType.undefined;
-    }
-  }
-
-  static String profileTypeToString(ProfileType profileType) {
-    switch (profileType.toString()) {
-      case "ProfileType.unique":
-        return "Visita Única";
-      case "ProfileType.serviceProvider":
-        return "Prestador de Serviços";
-      case "ProfileType.family":
-        return "Família";
-      default:
-        return "Não Definido";
-    }
   }
 }

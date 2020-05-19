@@ -144,11 +144,8 @@ class RegisterVisitorBloc extends Bloc<GeneralBlocState, GeneralBlocState>
         return "ERROR";
       }
 
-      if (nameSubject.value != null &&
-          nameSubject.value == visitorSubject.value.name &&
-          rgSubject.value != null &&
+      if (nameSubject.value == visitorSubject.value.name &&
           rgSubject.value == visitorSubject.value.rg &&
-          rgUrlSubject.value != null &&
           rgUrlSubject.value == visitorSubject.value.rgUrl &&
           phoneSubject.value != null &&
           phoneSubject.value == visitorSubject.value.phoneNumber) {

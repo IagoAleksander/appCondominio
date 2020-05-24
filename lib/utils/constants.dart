@@ -10,6 +10,7 @@ class Constants {
   static const String residentsCentreRoute = '/residentsCentreAdmin';
   static const String visitorsCentreAdminRoute = '/visitorsCentreAdmin';
   static const String profileRulesRoute = '/profileRules';
+  static const String chooseLocationRoute = '/chooseLocation';
 
   static const LOGIN = "Login";
   static const PASSWORD = "Senha";

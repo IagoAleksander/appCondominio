@@ -1,3 +1,4 @@
+import 'package:app_condominio/admin/ui/chooseLocation/chooseLocationScreen.dart';
 import 'package:app_condominio/admin/ui/residentsCentre/residentsCentreScreen.dart';
 import 'package:app_condominio/admin/ui/visitorsCentre/profileRulesScreen.dart';
 import 'package:app_condominio/admin/ui/visitorsCentre/visitorsCentreAdminScreen.dart';
@@ -32,6 +33,8 @@ class Router {
         return MaterialPageRoute(builder: (_) => VisitorsCentreAdminScreen());
       case Constants.profileRulesRoute:
         return MaterialPageRoute(builder: (_) => ProfileRulesScreen());
+      case Constants.chooseLocationRoute:
+        return MaterialPageRoute(builder: (_) => ChooseLocationScreen());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

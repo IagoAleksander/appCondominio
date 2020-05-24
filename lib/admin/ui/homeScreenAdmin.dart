@@ -72,9 +72,12 @@ class HomeScreenAdmin extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         OptionHomeItem(
-                          labelText: "Eventos",
-                          iconData: Icons.event,
-                          onTapFunction: () {},
+                          labelText: "Definir Localização",
+                          iconData: Icons.location_on,
+                          onTapFunction: () {
+                            Navigator.pushNamed(
+                                context, Constants.chooseLocationRoute);
+                          },
                         ),
                         SizedBox(
                           width: 40,

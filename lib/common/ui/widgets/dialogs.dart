@@ -31,4 +31,37 @@ class Dialogs {
                   ]));
         });
   }
+
+  static showAlertDialog(BuildContext context, String label) {
+    // set up the buttons
+    Widget continueButton = FlatButton(
+      child: Text(
+        "Ok",
+        style: TextStyle(color: Colors.white),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      backgroundColor: ColorsRes.primaryColorLight,
+      content: Text(
+        label,
+        style: TextStyle(color: Colors.white),
+      ),
+      actions: [
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }

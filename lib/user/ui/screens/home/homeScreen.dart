@@ -1,7 +1,13 @@
+import 'dart:async';
+
+import 'package:app_condominio/common/ui/widgets/dialogs.dart';
+import 'package:app_condominio/models/address.dart';
 import 'package:app_condominio/user/ui/screens/home/widgets/option_home_item.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
@@ -58,7 +64,9 @@ class HomeScreen extends StatelessWidget {
                         OptionHomeItem(
                           labelText: "Enviar Localização",
                           iconData: Icons.location_on,
-                          onTapFunction: () {},
+                          onTapFunction: () {
+                            shareLocation(context);
+                          },
                         ),
                       ],
                     ),
@@ -93,5 +101,40 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  shareLocation(BuildContext context) async {
+    Dialogs.showLoadingDialog(
+      context,
+      "Obtendo endereço",
+    );
+
+    DocumentReference documentReference =
+        Firestore.instance.collection("parameters").document("address");
+
+    await documentReference.get().then((snapshot) {
+      if (snapshot.exists) {
+        LocationAddress address = LocationAddress.fromJson(snapshot.data);
+        Share.share('Localização do condomínio:\n\n'
+            '${address.addressLine}\n'
+            '${address.subLocality}\n'
+            '${address.city}\n'
+            '${address.district}\n\n'
+            'http://maps.google.com/maps?q=loc:${address.latitude},${address.longitude}');
+        Timer(Duration(milliseconds: 1500), () => Navigator.pop(context));
+      } else {
+        Navigator.pop(context);
+        Dialogs.showAlertDialog(
+          context,
+          "Erro ao obter endereço",
+        );
+      }
+    }).catchError(() {
+      Navigator.pop(context);
+      Dialogs.showAlertDialog(
+        context,
+        "Erro ao obter endereço",
+      );
+    });
   }
 }

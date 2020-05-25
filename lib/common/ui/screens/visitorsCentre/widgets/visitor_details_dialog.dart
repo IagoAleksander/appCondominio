@@ -169,7 +169,8 @@ class VisitorDetailsDialog extends StatelessWidget {
                                   User user = User.fromJson(snapshot.data.data);
 
                                   return Container(
-                                    padding: EdgeInsets.only(top: 6, bottom: 10),
+                                    padding:
+                                        EdgeInsets.only(top: 6, bottom: 10),
                                     child: Text(
                                       user.name,
                                       style: TextStyle(color: Colors.white),
@@ -257,7 +258,8 @@ class VisitorDetailsDialog extends StatelessWidget {
                   visitor.accessCode != null) {
                 status = showRemovalAlertDialog(context, visitor);
               } else {
-                showAlertDialog(context);
+                Dialogs.showAlertDialog(context,
+                    "Você não tem permissão para remover o acesso desse visitante");
               }
             },
           )
@@ -579,35 +581,5 @@ class VisitorDetailsDialog extends StatelessWidget {
     );
 
     return Future.value(status);
-  }
-
-  static showAlertDialog(BuildContext context) {
-    // set up the buttons
-    Widget continueButton = FlatButton(
-      child: Text("Ok"),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      backgroundColor: ColorsRes.primaryColorLight,
-      content: Text(
-        "Você não tem permissão para remover o acesso desse visitante",
-        style: TextStyle(color: Colors.white),
-      ),
-      actions: [
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
   }
 }

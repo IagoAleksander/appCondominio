@@ -1,6 +1,7 @@
 import 'package:app_condominio/utils/colors_res.dart';
-import 'package:app_condominio/utils/validators/validators.dart';
+import 'package:app_condominio/utils/validators.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:masked_text_input_formatter/masked_text_input_formatter.dart';
 
@@ -13,7 +14,7 @@ class TextFormFieldCustom extends StatelessWidget {
   final IconData iconData;
   final TextInputType textInputType;
   final TextInputAction textInputAction;
-  final List<MaskedTextInputFormatter> maskedTextInputFormatter;
+  final List<TextInputFormatter> textInputFormatter;
   final Function(String) onChanged;
   final Function validator;
   final bool obscureText;
@@ -30,9 +31,9 @@ class TextFormFieldCustom extends StatelessWidget {
       this.nextFocusNode,
       this.textInputType,
       this.textInputAction,
-      this.maskedTextInputFormatter,
+      this.textInputFormatter,
       this.onChanged,
-      this.validator = LoginValidators.validateNotEmpty,
+      this.validator = Validators.validateNotEmpty,
       this.obscureText = false,
       this.isError = false,
       this.controller,
@@ -80,8 +81,8 @@ class TextFormFieldCustom extends StatelessWidget {
         errorStyle: TextStyle(
           color: Colors.deepOrange,
         ),
-        contentPadding:
-            new EdgeInsets.symmetric(vertical: 15.0, horizontal: iconData != null ? 10.0 : 20.0),
+        contentPadding: new EdgeInsets.symmetric(
+            vertical: 15.0, horizontal: iconData != null ? 10.0 : 20.0),
         hintText: hintText,
       ),
       keyboardType: textInputType,
@@ -91,7 +92,7 @@ class TextFormFieldCustom extends StatelessWidget {
             : null;
       },
       inputFormatters:
-          maskedTextInputFormatter != null ? maskedTextInputFormatter : [],
+          textInputFormatter != null ? textInputFormatter : [],
       onChanged: onChanged,
       obscureText: obscureText,
     );

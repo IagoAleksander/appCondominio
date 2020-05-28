@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:app_condominio/models/profile_rule.dart';
 import 'package:app_condominio/models/visitor.dart';
 import 'package:app_condominio/utils/constants.dart';
-import 'package:app_condominio/utils/validators/validators.dart';
+import 'package:app_condominio/utils/validators.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ProfileRulesBloc extends Bloc<GeneralBlocState, GeneralBlocState>
-    with LoginValidators {
+    with Validators {
   //Focus node
   final FocusNode titleFocus = FocusNode();
   final FocusNode valueFocus = FocusNode();

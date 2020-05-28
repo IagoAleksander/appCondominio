@@ -6,6 +6,7 @@ import 'package:app_condominio/models/visitor.dart';
 import 'package:app_condominio/user/bloc/RegisterVisitorBloc.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
+import 'package:app_condominio/utils/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:masked_text_input_formatter/masked_text_input_formatter.dart';
@@ -48,7 +49,7 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
     String phone = widget.visitor != null ? widget.visitor.phoneNumber : null;
     _phoneFieldController = TextEditingController(
         text: widget.visitor != null
-            ? widget.visitor.phoneNumber != null
+            ? widget.visitor.phoneNumber != null && widget.visitor.phoneNumber.length > 7
                 ? '(${phone.substring(0, 2)})${phone.substring(2, 7)}-${phone.substring(7)}'
                 : null
             : null);
@@ -136,7 +137,7 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                         nextFocusNode:
                                             registerVisitorBloc.phoneFocus,
                                         textInputAction: TextInputAction.next,
-                                        maskedTextInputFormatter: [
+                                        textInputFormatter: [
                                           MaskedTextInputFormatter(
                                             mask: 'XX.XXX.XXX-X',
                                             separator: '.',
@@ -157,11 +158,14 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                       child: TextFormFieldCustom(
                                         controller: _phoneFieldController,
                                         labelText: "Celular (opcional)",
+                                        validator: (phone, _) =>
+                                            Validators.validatePhone(phone,
+                                                "Insira um número válido"),
                                         iconData: Icons.phone_android,
                                         focusNode:
                                             registerVisitorBloc.phoneFocus,
                                         textInputAction: TextInputAction.done,
-                                        maskedTextInputFormatter: [
+                                        textInputFormatter: [
                                           MaskedTextInputFormatter(
                                             mask: '(XX)XXXXX-XXXX',
                                             separator: '(',

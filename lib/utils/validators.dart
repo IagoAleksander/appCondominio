@@ -2,9 +2,17 @@ import 'dart:async';
 
 import 'package:email_validator/email_validator.dart';
 
-class LoginValidators {
+class Validators {
   static String validateEmail(String email, String errorLabel) {
     if (!EmailValidator.validate(email)) {
+      return errorLabel;
+    }
+    return null;
+  }
+
+  static String validatePhone(String phone, String errorLabel) {
+    String rawPhone = phone.replaceAll(RegExp(r'\D'), '').trim();
+    if (rawPhone.length < 10 || rawPhone.length > 11) {
       return errorLabel;
     }
     return null;
@@ -17,7 +25,8 @@ class LoginValidators {
     return null;
   }
 
-  static String confirmPassword(String password, String confirmPassword, String errorLabel) {
+  static String confirmPassword(
+      String password, String confirmPassword, String errorLabel) {
     if (password != confirmPassword) {
       return errorLabel;
     }

@@ -2,7 +2,7 @@ import 'package:app_condominio/common/ui/widgets/text_form_field_custom.dart';
 import 'package:app_condominio/user/bloc/RegisterBloc.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
-import 'package:app_condominio/utils/validators/validators.dart';
+import 'package:app_condominio/utils/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:masked_text_input_formatter/masked_text_input_formatter.dart';
@@ -91,7 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           textInputAction: TextInputAction.next,
                                           onChanged: registerBloc.changeEmail,
                                           validator:
-                                              LoginValidators.validateEmail,
+                                              Validators.validateEmail,
                                           isError: emailAlreadyInUse),
                                     ),
                                     Container(
@@ -106,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         nextFocusNode:
                                             registerBloc.buildingFocus,
                                         textInputAction: TextInputAction.next,
-                                        maskedTextInputFormatter: [
+                                        textInputFormatter: [
                                           MaskedTextInputFormatter(
                                             mask: 'XX.XXX.XXX-X',
                                             separator: '.',
@@ -169,7 +169,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         onChanged: registerBloc.changePassword,
                                         obscureText: true,
                                         validator:
-                                            LoginValidators.validatePassword,
+                                            Validators.validatePassword,
                                       ),
                                     ),
                                     Container(
@@ -188,7 +188,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             registerBloc.changeConfirmPassword,
                                         obscureText: true,
                                         validator:
-                                            LoginValidators.validatePassword,
+                                            Validators.validatePassword,
                                       ),
                                     ),
                                   ],

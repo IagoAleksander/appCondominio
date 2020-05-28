@@ -1,7 +1,7 @@
 import 'package:app_condominio/user/bloc/LoginBloc.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
-import 'package:app_condominio/utils/validators/validators.dart';
+import 'package:app_condominio/utils/validators.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
@@ -135,9 +135,9 @@ class LoginScreen extends StatelessWidget {
 //        }
 //        return null;
 //      },
-      emailValidator: (email) => LoginValidators.validateEmail(email, "Insira um email válido"),
+      emailValidator: (email) => Validators.validateEmail(email, "Insira um email válido"),
       passwordValidator: (password) =>
-          LoginValidators.validatePassword(password, "Senha precisa conter ao menos 6 dígitos"),
+          Validators.validatePassword(password, "Senha precisa conter ao menos 6 dígitos"),
 
       onLogin: (loginData) {
         print('Login info');

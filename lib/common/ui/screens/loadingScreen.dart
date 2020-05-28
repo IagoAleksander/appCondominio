@@ -6,14 +6,20 @@ import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
 class LoadingScreen extends StatelessWidget {
+  final bool showHeader;
+
+  LoadingScreen({this.showHeader = true});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorsRes.primaryColor,
       body: Column(children: <Widget>[
-        Container(
-            padding: EdgeInsets.only(top: 100.0, bottom: 10.0),
-            child: Image(image: AssetImage('assets/logo.png'))),
+        showHeader
+            ? Container(
+                padding: EdgeInsets.only(top: 100.0, bottom: 10.0),
+                child: Image(image: AssetImage('assets/logo.png')))
+            : Container(),
         Spacer(
           flex: 4,
         ),

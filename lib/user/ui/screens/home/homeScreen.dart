@@ -129,7 +129,7 @@ class HomeScreen extends StatelessWidget {
           "Erro ao obter endereço",
         );
       }
-    }).catchError(() {
+    }).catchError((e) {
       Navigator.pop(context);
       Dialogs.showAlertDialog(
         context,

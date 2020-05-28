@@ -1,7 +1,7 @@
 import 'package:app_condominio/models/user.dart';
 import 'package:app_condominio/utils/base_auth.dart';
 import 'package:app_condominio/utils/constants.dart';
-import 'package:app_condominio/utils/validators/validators.dart';
+import 'package:app_condominio/utils/validators.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class RegisterBloc extends Bloc<GeneralBlocState, GeneralBlocState>
-    with LoginValidators {
+    with Validators {
   //Focus node
   final FocusNode nameFocus = FocusNode();
   final FocusNode emailFocus = FocusNode();

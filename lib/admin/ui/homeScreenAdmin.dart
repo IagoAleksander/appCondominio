@@ -1,6 +1,9 @@
+import 'package:app_condominio/common/ui/widgets/dialogs.dart';
+import 'package:app_condominio/models/contact_info.dart';
 import 'package:app_condominio/user/ui/screens/home/widgets/option_home_item.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
@@ -83,9 +86,11 @@ class HomeScreenAdmin extends StatelessWidget {
                           width: 40,
                         ),
                         OptionHomeItem(
-                          labelText: "Salão de Festas",
-                          iconData: Icons.music_note,
-                          onTapFunction: () {},
+                          labelText: "Configurar Contato",
+                          iconData: Icons.contact_phone,
+                          onTapFunction: () {
+                            getContact(context);
+                          },
                         ),
                       ],
                     ),
@@ -99,5 +104,36 @@ class HomeScreenAdmin extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  getContact(BuildContext context) async {
+    Dialogs.showLoadingDialog(
+      context,
+      "Obtendo informações de contato",
+    );
+
+    DocumentReference documentReference =
+    Firestore.instance.collection("parameters").document("contactInfo");
+
+    await documentReference.get().then((snapshot) {
+      if (snapshot.exists) {
+        ContactInfo info = ContactInfo.fromJson(snapshot.data);
+        Navigator.pop(context);
+        Navigator.pushNamed(context, Constants.setContactInfoRoute,
+            arguments: info);
+      } else {
+        Navigator.pop(context);
+        Dialogs.showAlertDialog(
+          context,
+          "Erro ao obter informações de contato",
+        );
+      }
+    }).catchError((e) {
+      Navigator.pop(context);
+      Dialogs.showAlertDialog(
+        context,
+        "Erro ao obter informações de contato",
+      );
+    });
   }
 }

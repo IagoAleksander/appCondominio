@@ -1,10 +1,12 @@
 import 'package:app_condominio/admin/ui/chooseLocation/chooseLocationScreen.dart';
 import 'package:app_condominio/admin/ui/residentsCentre/residentsCentreScreen.dart';
+import 'package:app_condominio/admin/ui/setContactInfo/setContactInfoScreen.dart';
 import 'package:app_condominio/admin/ui/visitorsCentre/profileRulesScreen.dart';
 import 'package:app_condominio/admin/ui/visitorsCentre/visitorsCentreAdminScreen.dart';
 import 'package:app_condominio/common/ui/screens/home/homeScreenSelector.dart';
 import 'package:app_condominio/common/ui/screens/login/loginScreen.dart';
 import 'package:app_condominio/common/ui/screens/register/registerScreen.dart';
+import 'package:app_condominio/models/contact_info.dart';
 import 'package:app_condominio/models/visitor.dart';
 import 'package:app_condominio/user/ui/screens/registerVisitor/registerVisitorScreen.dart';
 import 'package:app_condominio/user/ui/screens/visitorsCentre/visitorsCentreScreen.dart';
@@ -35,6 +37,9 @@ class Router {
         return MaterialPageRoute(builder: (_) => ProfileRulesScreen());
       case Constants.chooseLocationRoute:
         return MaterialPageRoute(builder: (_) => ChooseLocationScreen());
+      case Constants.setContactInfoRoute:
+        var info = settings.arguments as ContactInfo;
+        return MaterialPageRoute(builder: (_) => SetContactInfoScreen(info));
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

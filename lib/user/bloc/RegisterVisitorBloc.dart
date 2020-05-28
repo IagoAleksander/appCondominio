@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:app_condominio/models/visitor.dart';
 import 'package:app_condominio/utils/constants.dart';
-import 'package:app_condominio/utils/validators/validators.dart';
+import 'package:app_condominio/utils/validators.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class RegisterVisitorBloc extends Bloc<GeneralBlocState, GeneralBlocState>
-    with LoginValidators {
+    with Validators {
   //Focus node
   final FocusNode nameFocus = FocusNode();
   final FocusNode rgFocus = FocusNode();
@@ -33,7 +33,9 @@ class RegisterVisitorBloc extends Bloc<GeneralBlocState, GeneralBlocState>
 
   Function(String) get changeRg => rgSubject.sink.add;
 
-  Function(String) get changePhone => phoneSubject.sink.add;
+  changePhone(String phone) {
+    phoneSubject.sink.add(phone.replaceAll(RegExp(r'\D'), '').trim());
+  }
 
   Function(String) get changeRgUrl => rgUrlSubject.sink.add;
 
@@ -109,10 +111,7 @@ class RegisterVisitorBloc extends Bloc<GeneralBlocState, GeneralBlocState>
       Visitor visitor = Visitor(
         name: nameSubject.value,
         rg: rgSubject.value,
-        phoneNumber: phoneSubject.value
-            .replaceAll('(', '')
-            .replaceAll(')', '')
-            .replaceAll('-', ''),
+        phoneNumber: phoneSubject.value.replaceAll(RegExp(r'\D'), '').trim(),
         rgUrl: rgUrlSubject.value,
         registeredBy: currentUser.uid,
         isLiberated: false,
@@ -172,10 +171,7 @@ class RegisterVisitorBloc extends Bloc<GeneralBlocState, GeneralBlocState>
       Visitor newVisitor = Visitor(
         name: nameSubject.value,
         rg: rgSubject.value,
-        phoneNumber: phoneSubject.value
-            .replaceAll('(', '')
-            .replaceAll(')', '')
-            .replaceAll('-', ''),
+        phoneNumber: phoneSubject.value.replaceAll(RegExp(r'\D'), '').trim(),
         rgUrl: rgUrlSubject.value,
         registeredBy: currentUser.uid,
         isLiberated: visitor.isLiberated == null ? false : visitor.isLiberated,

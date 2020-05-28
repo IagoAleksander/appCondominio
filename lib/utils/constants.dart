@@ -11,6 +11,7 @@ class Constants {
   static const String visitorsCentreAdminRoute = '/visitorsCentreAdmin';
   static const String profileRulesRoute = '/profileRules';
   static const String chooseLocationRoute = '/chooseLocation';
+  static const String setContactInfoRoute = '/setContactInfo';
 
   static const LOGIN = "Login";
   static const PASSWORD = "Senha";

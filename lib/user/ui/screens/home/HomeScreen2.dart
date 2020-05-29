@@ -73,8 +73,8 @@ class HomeScreen2 extends StatelessWidget {
                           width: 40,
                         ),
                         OptionHomeItem(
-                          labelText: "Canal direto Síndico",
-                          iconData: Icons.add,
+                          labelText: "Salão de Festas",
+                          iconData: Icons.music_note,
                           onTapFunction: () {},
                         ),
                       ],

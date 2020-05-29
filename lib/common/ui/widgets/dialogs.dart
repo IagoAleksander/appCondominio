@@ -1,5 +1,6 @@
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 class Dialogs {
   static Future<void> showLoadingDialog(
@@ -62,6 +63,16 @@ class Dialogs {
       builder: (BuildContext context) {
         return alert;
       },
+    );
+  }
+
+  static showToast(BuildContext context, String message) {
+    Toast.show(
+      message,
+      context,
+      duration: Toast.LENGTH_LONG,
+      gravity: Toast.BOTTOM,
+      backgroundColor: Colors.grey[900],
     );
   }
 }

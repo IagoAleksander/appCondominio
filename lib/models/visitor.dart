@@ -1,7 +1,7 @@
 import 'access_code.dart';
 
 class Visitor {
-  final int id;
+  String id;
   final String name;
   final String rg;
   final String rgUrl;

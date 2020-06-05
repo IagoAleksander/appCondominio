@@ -2,12 +2,8 @@ import 'dart:async';
 
 import 'package:app_condominio/admin/ui/visitorsCentre/widgets/accessHistoryPage.dart';
 import 'package:app_condominio/common/ui/screens/visitorsCentre/visitorsLiberatedPage.dart';
-import 'package:app_condominio/common/ui/widgets/dialogs.dart';
-import 'package:app_condominio/models/user.dart';
-import 'package:app_condominio/admin/ui/residentsCentre/widgets/waiting_approval_card.dart';
 import 'package:app_condominio/models/visitor.dart';
 import 'package:app_condominio/utils/colors_res.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 

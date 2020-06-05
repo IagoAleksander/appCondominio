@@ -21,6 +21,7 @@ class TextFormFieldCustom extends StatelessWidget {
   final bool isError;
   final TextEditingController controller;
   final bool isOptional;
+  final bool enabled;
 
   TextFormFieldCustom(
       {this.labelText,
@@ -37,11 +38,13 @@ class TextFormFieldCustom extends StatelessWidget {
       this.obscureText = false,
       this.isError = false,
       this.controller,
-      this.isOptional = false});
+      this.isOptional = false,
+      this.enabled = true});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: enabled,
       controller: controller,
       textInputAction: textInputAction,
       focusNode: focusNode,

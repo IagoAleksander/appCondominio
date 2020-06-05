@@ -25,6 +25,13 @@ class Validators {
     return null;
   }
 
+  static String validateDocument(String value, String errorLabel) {
+    if (value.length < 12) {
+      return errorLabel;
+    }
+    return null;
+  }
+
   static String confirmPassword(
       String password, String confirmPassword, String errorLabel) {
     if (password != confirmPassword) {

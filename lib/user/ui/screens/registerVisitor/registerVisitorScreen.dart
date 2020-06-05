@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app_condominio/common/ui/widgets/dialogs.dart';
 import 'package:app_condominio/common/ui/widgets/text_form_field_custom.dart';
 import 'package:app_condominio/models/visitor.dart';
 import 'package:app_condominio/user/bloc/RegisterVisitorBloc.dart';
@@ -10,6 +11,7 @@ import 'package:app_condominio/utils/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:masked_text_input_formatter/masked_text_input_formatter.dart';
+import 'package:app_condominio/utils/globals.dart' as globals;
 
 import 'package:image_picker/image_picker.dart'; // For Image Picker
 
@@ -24,6 +26,7 @@ class RegisterVisitorScreen extends StatefulWidget {
 
 class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
   RegisterVisitorBloc registerVisitorBloc;
+  GlobalKey _mainGlobalKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
   bool _autoValidate = false;
@@ -40,18 +43,14 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
   void initState() {
     registerVisitorBloc = RegisterVisitorBloc(widget.visitor);
 
-    _nameFieldController = TextEditingController(
-        text: widget.visitor != null ? widget.visitor.name : null);
+    _nameFieldController = TextEditingController(text: widget.visitor.name);
 
-    _rgFieldController = TextEditingController(
-        text: widget.visitor != null ? widget.visitor.rg : null);
+    _rgFieldController = TextEditingController(text: widget.visitor.rg);
 
-    String phone = widget.visitor != null ? widget.visitor.phoneNumber : null;
+    String phone = widget.visitor.phoneNumber;
     _phoneFieldController = TextEditingController(
-        text: widget.visitor != null
-            ? widget.visitor.phoneNumber != null && widget.visitor.phoneNumber.length > 7
-                ? '(${phone.substring(0, 2)})${phone.substring(2, 7)}-${phone.substring(7)}'
-                : null
+        text: phone != null && phone.length > 7
+            ? '(${phone.substring(0, 2)})${phone.substring(2, 7)}-${phone.substring(7)}'
             : null);
 
     super.initState();
@@ -59,14 +58,15 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.visitor != null && widget.visitor.rgUrl != null) {
+    if (widget.visitor.rgUrl != null) {
       _hasImage = true;
     }
     return Scaffold(
+        key: _mainGlobalKey,
         backgroundColor: ColorsRes.primaryColor,
         appBar: AppBar(
           title: Text(
-            widget.visitor == null
+            widget.visitor.id == null
                 ? "Cadastro de Visitantes"
                 : "Edição de Visitante",
             style: TextStyle(
@@ -149,6 +149,7 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                         ],
                                         onChanged: registerVisitorBloc.changeRg,
                                         isError: docAlreadyInUse,
+                                        enabled: false,
                                       ),
                                     ),
                                     Container(
@@ -246,8 +247,7 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                                     ),
                                                   )
                                                 : Container()
-                                            : widget.visitor != null &&
-                                                    widget.visitor.rgUrl != null
+                                            : widget.visitor.rgUrl != null
                                                 ? Image.network(
                                                     widget.visitor.rgUrl,
                                                     height: 150,
@@ -300,7 +300,7 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                             color: ColorsRes.primaryColor,
                                             borderRadius: 90.0,
                                             defaultWidget: Text(
-                                              widget.visitor == null
+                                              widget.visitor.id == null
                                                   ? "REGISTRAR"
                                                   : "ATUALIZAR",
                                               style: TextStyle(
@@ -326,8 +326,9 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                                 });
 
                                                 String result;
-                                                if (widget.visitor == null) {
-                                                  Scaffold.of(context)
+                                                if (widget.visitor.id == null) {
+                                                  (_mainGlobalKey.currentState
+                                                          as ScaffoldState)
                                                       .showSnackBar(SnackBar(
                                                           content: Text(
                                                               'Registrando visitante')));
@@ -336,7 +337,8 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                                       await registerVisitorBloc
                                                           .saveVisitor();
                                                 } else {
-                                                  Scaffold.of(context)
+                                                  (_mainGlobalKey.currentState
+                                                          as ScaffoldState)
                                                       .showSnackBar(SnackBar(
                                                           content: Text(
                                                               'Atualizando visitante')));
@@ -346,44 +348,59 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                                           .updateVisitor();
                                                 }
 
-                                                Scaffold.of(context)
-                                                    .hideCurrentSnackBar();
                                                 switch (result) {
                                                   case "SUCCESS":
-                                                    Scaffold.of(context)
-                                                        .showSnackBar(SnackBar(
-                                                            content: Text(widget
-                                                                        .visitor ==
-                                                                    null
-                                                                ? 'Visitante registrado com sucesso'
-                                                                : 'Visitante atualizado com sucesso')));
-
                                                     Timer(
                                                         Duration(
                                                             milliseconds: 1500),
                                                         () {
-                                                      Navigator
-                                                          .pushNamedAndRemoveUntil(
-                                                        context,
-                                                        Constants
-                                                            .visitorsCentreRoute,
-                                                        ModalRoute.withName(
+                                                      (_mainGlobalKey
+                                                                  .currentState
+                                                              as ScaffoldState)
+                                                          .hideCurrentSnackBar();
+                                                      Dialogs.showToast(
+                                                          context,
+                                                          widget.visitor.id ==
+                                                                  null
+                                                              ? 'Visitante registrado com sucesso'
+                                                              : 'Visitante atualizado com sucesso');
+
+                                                      if (globals.isUserAdmin) {
+                                                        Navigator.pushNamed(
+                                                            context,
                                                             Constants
-                                                                .visitorsCentreRoute),
-                                                        arguments:
-                                                            registerVisitorBloc
-                                                                .visitorSubject
-                                                                .value,
-                                                      );
+                                                                .visitorsCentreAdminRoute);
+                                                      } else {
+                                                        Navigator
+                                                            .pushNamedAndRemoveUntil(
+                                                          context,
+                                                          Constants
+                                                              .visitorsCentreRoute,
+                                                          ModalRoute.withName(
+                                                              Constants
+                                                                  .visitorsCentreRoute),
+                                                          arguments:
+                                                              registerVisitorBloc
+                                                                  .visitorSubject
+                                                                  .value,
+                                                        );
+                                                      }
                                                     });
                                                     break;
                                                   case "ERROR_DOC_ALREADY_IN_USE":
+                                                    (_mainGlobalKey.currentState
+                                                            as ScaffoldState)
+                                                        .hideCurrentSnackBar();
                                                     setState(() {
                                                       docAlreadyInUse = true;
                                                     });
                                                     break;
                                                   case "ERROR_NOTHING_CHANGE":
-                                                    Scaffold.of(context)
+                                                    (_mainGlobalKey.currentState
+                                                            as ScaffoldState)
+                                                        .hideCurrentSnackBar();
+                                                    (_mainGlobalKey.currentState
+                                                            as ScaffoldState)
                                                         .showSnackBar(SnackBar(
                                                             content: Text(
                                                                 'Nada a atualizar')));
@@ -395,7 +412,11 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                                     });
                                                     break;
                                                   default:
-                                                    Scaffold.of(context)
+                                                    (_mainGlobalKey.currentState
+                                                            as ScaffoldState)
+                                                        .hideCurrentSnackBar();
+                                                    (_mainGlobalKey.currentState
+                                                            as ScaffoldState)
                                                         .showSnackBar(SnackBar(
                                                             content: Text(
                                                                 'Erro no registro de visitante')));

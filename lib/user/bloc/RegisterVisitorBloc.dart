@@ -34,7 +34,12 @@ class RegisterVisitorBloc extends Bloc<GeneralBlocState, GeneralBlocState>
   Function(String) get changeRg => rgSubject.sink.add;
 
   changePhone(String phone) {
-    phoneSubject.sink.add(phone.replaceAll(RegExp(r'\D'), '').trim());
+    if (phone != null) {
+      phoneSubject.sink.add(phone.replaceAll(RegExp(r'\D'), '').trim());
+    }
+    else {
+      phoneSubject.sink.add(null);
+    }
   }
 
   Function(String) get changeRgUrl => rgUrlSubject.sink.add;
@@ -109,6 +114,7 @@ class RegisterVisitorBloc extends Bloc<GeneralBlocState, GeneralBlocState>
       FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
 
       Visitor visitor = Visitor(
+        id: rgSubject.value,
         name: nameSubject.value,
         rg: rgSubject.value,
         phoneNumber: phoneSubject.value.replaceAll(RegExp(r'\D'), '').trim(),
@@ -120,7 +126,7 @@ class RegisterVisitorBloc extends Bloc<GeneralBlocState, GeneralBlocState>
 
       Firestore.instance
           .collection('visitors')
-          .document('${rgSubject.value}')
+          .document(visitor.id)
           .setData(visitor.toJson());
 
       print("SUCCESS");
@@ -145,7 +151,7 @@ class RegisterVisitorBloc extends Bloc<GeneralBlocState, GeneralBlocState>
 
       if (nameSubject.value == visitorSubject.value.name &&
           rgSubject.value == visitorSubject.value.rg &&
-          rgUrlSubject.value == visitorSubject.value.rgUrl &&
+          rgFileSubject.value == null &&
           phoneSubject.value != null &&
           phoneSubject.value == visitorSubject.value.phoneNumber) {
         print("Error same values");
@@ -169,6 +175,7 @@ class RegisterVisitorBloc extends Bloc<GeneralBlocState, GeneralBlocState>
       FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
 
       Visitor newVisitor = Visitor(
+        id: rgSubject.value,
         name: nameSubject.value,
         rg: rgSubject.value,
         phoneNumber: phoneSubject.value.replaceAll(RegExp(r'\D'), '').trim(),
@@ -180,7 +187,7 @@ class RegisterVisitorBloc extends Bloc<GeneralBlocState, GeneralBlocState>
 
       Firestore.instance
           .collection('visitors')
-          .document('${rgSubject.value}')
+          .document(newVisitor.id)
           .setData(newVisitor.toJson());
 
       print("SUCCESS");

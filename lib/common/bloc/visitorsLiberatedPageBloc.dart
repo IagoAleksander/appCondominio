@@ -75,6 +75,7 @@ class VisitorsLiberatedPageBloc
 
       if (snapshot != null && snapshot.exists) {
         Visitor visitor = Visitor.fromJson(snapshot.data);
+        visitor.id = snapshot.documentID;
         if (visitor.isLiberated) {
           visitorsList.add(visitor);
         }

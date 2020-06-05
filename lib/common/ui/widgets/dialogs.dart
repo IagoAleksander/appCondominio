@@ -70,9 +70,9 @@ class Dialogs {
     Toast.show(
       message,
       context,
-      duration: Toast.LENGTH_LONG,
+      duration: 4,
       gravity: Toast.BOTTOM,
-      backgroundColor: Colors.grey[900],
+      backgroundColor: Colors.grey[800],
     );
   }
 }

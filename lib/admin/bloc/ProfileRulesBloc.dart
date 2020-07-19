@@ -1,14 +1,8 @@
-import 'dart:io';
-
 import 'package:app_condominio/models/profile_rule.dart';
-import 'package:app_condominio/models/visitor.dart';
 import 'package:app_condominio/utils/constants.dart';
 import 'package:app_condominio/utils/validators.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 

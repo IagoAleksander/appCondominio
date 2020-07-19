@@ -14,7 +14,6 @@ class ResidentsCentreScreen extends StatefulWidget {
 }
 
 class _ResidentsCentreScreenState extends State<ResidentsCentreScreen> {
-  int currentPage = 0;
 
   @override
   Widget build(BuildContext context) {

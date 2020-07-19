@@ -12,6 +12,15 @@ class Constants {
   static const String profileRulesRoute = '/profileRules';
   static const String chooseLocationRoute = '/chooseLocation';
   static const String setContactInfoRoute = '/setContactInfo';
+  static const String eventsCentreCalendarRoute = '/eventsCentreCalendar';
+  static const String eventsFeedRoute = '/eventsFeed';
+  static const String eventDetailsRoute = '/eventDetails';
+  static const String eventsCentreRoute = '/eventsCentre';
+  static const String registerEventRoute = '/registerEvent';
+  static const String eventVisualizationRoute = '/eventVisualization';
+  static const String createEventReportRoute = '/createEventReport';
+  static const String eventReportRoute = '/eventReport';
+  static const String reportVisualizationRoute = '/reportVisualization';
 
   static const LOGIN = "Login";
   static const PASSWORD = "Senha";

@@ -4,12 +4,12 @@ import 'package:app_condominio/admin/bloc/choose_location_bloc.dart';
 import 'package:app_condominio/admin/ui/chooseLocation/widgets/text_form_field_address.dart';
 import 'package:app_condominio/common/ui/widgets/dialogs.dart';
 import 'package:app_condominio/utils/colors_res.dart';
-import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
-import 'package:flutter/services.dart';
 
 class ChooseLocationScreen extends StatefulWidget {
   @override

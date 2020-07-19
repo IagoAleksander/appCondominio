@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:app_condominio/admin/ui/visitorsCentre/widgets/accessHistoryPage.dart';
 import 'package:app_condominio/common/ui/screens/visitorsCentre/visitorsLiberatedPage.dart';
 import 'package:app_condominio/models/visitor.dart';

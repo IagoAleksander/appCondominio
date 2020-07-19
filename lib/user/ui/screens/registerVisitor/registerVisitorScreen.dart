@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:app_condominio/common/ui/widgets/dialogs.dart';
 import 'package:app_condominio/common/ui/widgets/text_form_field_custom.dart';
@@ -7,13 +6,12 @@ import 'package:app_condominio/models/visitor.dart';
 import 'package:app_condominio/user/bloc/RegisterVisitorBloc.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
+import 'package:app_condominio/utils/globals.dart' as globals;
 import 'package:app_condominio/utils/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
-import 'package:masked_text_input_formatter/masked_text_input_formatter.dart';
-import 'package:app_condominio/utils/globals.dart' as globals;
-
 import 'package:image_picker/image_picker.dart'; // For Image Picker
+import 'package:masked_text_input_formatter/masked_text_input_formatter.dart';
 
 class RegisterVisitorScreen extends StatefulWidget {
   final Visitor visitor;
@@ -195,7 +193,7 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
                                           'Adicione uma foto do RG ou da CNH do visitante',
                                           style: TextStyle(
                                             color: _imageNotSelectedError
-                                                ? Colors.red
+                                                ? Colors.redAccent
                                                 : ColorsRes.primaryColor,
                                           ),
                                           textAlign: TextAlign.center,
@@ -456,11 +454,13 @@ class _RegisterVisitorScreenState extends State<RegisterVisitorScreen> {
 
   Future chooseFile() async {
     await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
-      setState(() {
-        _hasImage = true;
-        _imageNotSelectedError = false;
-        registerVisitorBloc.changeRgFile(image);
-      });
+      if (image != null) {
+        setState(() {
+          _hasImage = true;
+          _imageNotSelectedError = false;
+          registerVisitorBloc.changeRgFile(image);
+        });
+      }
     });
   }
 }

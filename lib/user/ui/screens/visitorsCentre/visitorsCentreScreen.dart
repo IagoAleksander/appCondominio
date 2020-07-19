@@ -9,10 +9,10 @@ import 'package:app_condominio/models/visitor.dart';
 import 'package:app_condominio/user/bloc/SearchVisitorsBloc.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
+import 'package:app_condominio/utils/globals.dart' as globals;
 import 'package:app_condominio/utils/validators.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:app_condominio/utils/globals.dart' as globals;
 import 'package:masked_text_input_formatter/masked_text_input_formatter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -74,7 +74,7 @@ class _VisitorsCentreScreenState extends State<VisitorsCentreScreen> {
                         label: isOpen.hasData && isOpen.data
                             ? "Esconder busca"
                             : "Liberar visitante",
-                        icon: isOpen.data
+                        suffixIcon: isOpen.data
                             ? Icons.keyboard_arrow_down
                             : Icons.keyboard_arrow_up,
                         backgroundColor: isOpen.data

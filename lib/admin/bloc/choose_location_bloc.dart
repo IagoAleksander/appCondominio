@@ -3,8 +3,8 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:location/location.dart' as LocationServices;
+import 'package:rxdart/rxdart.dart';
 
 enum ChooseLocationState {
   IDLE,

@@ -1,4 +1,7 @@
-import 'package:app_condominio/admin/ui/homeScreenAdmin.dart';
+import 'package:app_condominio/admin/ui/home/HomeScreenAdmin2.dart';
+import 'package:app_condominio/admin/ui/home/HomeScreenAdmin3.dart';
+import 'package:app_condominio/admin/ui/home/HomeScreenAdmin4.dart';
+import 'package:app_condominio/admin/ui/home/homeScreenAdmin.dart';
 import 'package:app_condominio/common/ui/screens/loadingScreen.dart';
 import 'package:app_condominio/common/ui/screens/waitingApprovalScreen.dart';
 import 'package:app_condominio/models/user.dart';
@@ -113,9 +116,8 @@ class _HomeScreenState extends State<HomeScreenSelector> {
                       : !isClientApproved
                           ? WaitingApprovalScreen()
                           : returnPage(currentPage),
-                  bottomNavigationBar: !isClientApproved
-                      ? null
-                      : FancyBottomNavigation(
+                  bottomNavigationBar: isClientApproved || globals.isUserAdmin
+                      ? FancyBottomNavigation(
                           tabs: [
                             TabData(iconData: Icons.home, title: "Home"),
                             TabData(
@@ -137,7 +139,8 @@ class _HomeScreenState extends State<HomeScreenSelector> {
                           circleColor: ColorsRes.primaryColor,
                           inactiveIconColor: Colors.white,
                           textColor: Colors.white,
-                        ),
+                        )
+                      : null,
                 );
               });
         });
@@ -149,11 +152,11 @@ class _HomeScreenState extends State<HomeScreenSelector> {
         case 0:
           return HomeScreenAdmin();
         case 1:
-          return HomeScreen2();
+          return HomeScreenAdmin2();
         case 2:
-          return HomeScreen3();
+          return HomeScreenAdmin3();
         case 3:
-          return HomeScreen4();
+          return HomeScreenAdmin4();
       }
     } else {
       switch (page) {

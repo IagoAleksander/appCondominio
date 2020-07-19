@@ -3,7 +3,6 @@ import 'package:app_condominio/utils/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:masked_text_input_formatter/masked_text_input_formatter.dart';
 
 class TextFormFieldCustom extends StatelessWidget {
   final String labelText;

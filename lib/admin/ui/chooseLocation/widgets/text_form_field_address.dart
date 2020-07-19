@@ -1,4 +1,3 @@
-import 'package:app_condominio/utils/colors_res.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 

@@ -1,8 +1,8 @@
 import 'package:app_condominio/common/bloc/visitorsLiberatedPageBloc.dart';
 import 'package:app_condominio/common/ui/screens/login/widgets/LoadingIndicator.dart';
-import 'package:app_condominio/models/visitor.dart';
 import 'package:app_condominio/common/ui/screens/visitorsCentre/widgets/visitor_card.dart';
 import 'package:app_condominio/common/ui/screens/visitorsCentre/widgets/visitor_details_dialog.dart';
+import 'package:app_condominio/models/visitor.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:flutter/material.dart';
 

@@ -37,7 +37,7 @@ class VisitorCard extends StatelessWidget {
                             new BorderSide(width: 1.0, color: Colors.white24))),
                 child: Icon(
                   isLiberated? Icons.lock_open : Icons.lock_outline,
-                  color: isLiberated? ColorsRes.accentColor : Colors.red,
+                  color: isLiberated? ColorsRes.accentColor : Colors.redAccent,
                   size: 30,
                 ),
               ),

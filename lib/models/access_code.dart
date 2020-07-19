@@ -1,4 +1,4 @@
-import 'package:app_condominio/models/profile_rule.dart';
+
 
 class AccessCode {
   final int id;

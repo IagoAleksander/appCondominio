@@ -1,8 +1,11 @@
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
 import 'package:app_condominio/utils/router.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart';
 
 void main() {
 //  WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +18,7 @@ void main() {
       statusBarIconBrightness: Brightness.light,
       systemNavigationBarDividerColor: ColorsRes.primaryColorLight));
 
+  Intl.defaultLocale = 'pt_BR';
   runApp(MyApp());
 }
 
@@ -25,6 +29,15 @@ class MyApp extends StatelessWidget {
       color: ColorsRes.primaryColor,
       onGenerateRoute: Router.generateRoute,
       initialRoute: Constants.loginRoute,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        DefaultCupertinoLocalizations.delegate
+      ],
+      supportedLocales: [
+        const Locale('pt'),
+      ],
       theme: ThemeData(
         // Define the default brightness and colors.
 //        brightness: Brightness.dark,

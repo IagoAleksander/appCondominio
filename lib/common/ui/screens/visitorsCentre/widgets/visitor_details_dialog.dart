@@ -2,20 +2,20 @@ library two_letter_icon;
 
 import 'dart:math';
 
-import 'package:app_condominio/common/ui/screens/login/widgets/LoadingIndicator.dart';
 import 'package:app_condominio/common/ui/screens/visitorsCentre/widgets/profile_rule_option_radio.dart';
+import 'package:app_condominio/common/ui/screens/visitorsCentre/widgets/two_letter_icon.dart';
 import 'package:app_condominio/common/ui/widgets/dialogs.dart';
 import 'package:app_condominio/models/access_code.dart';
 import 'package:app_condominio/models/profile_rule.dart';
 import 'package:app_condominio/models/user.dart';
 import 'package:app_condominio/models/visitor.dart';
-import 'package:app_condominio/common/ui/screens/visitorsCentre/widgets/two_letter_icon.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../../../../utils/globals.dart' as globals;
 import '../../../widgets/border_button.dart';
 
@@ -252,7 +252,7 @@ class VisitorDetailsDialog extends StatelessWidget {
     Widget continueButton = visitor.isLiberated
         ? BorderButton(
             "Remover acesso",
-            Colors.red,
+            Colors.redAccent,
             () {
               if ((globals.isUserAdmin || isResponsableUser) &&
                   visitor.accessCode != null) {
@@ -327,7 +327,7 @@ class VisitorDetailsDialog extends StatelessWidget {
                   Text(
                     "Escolha um perfil para o acesso do visitante",
                     style: TextStyle(
-                      color: errorNoRadioSelected ? Colors.red : Colors.white,
+                      color: errorNoRadioSelected ? Colors.redAccent : Colors.white,
                     ),
                   ),
                   SizedBox(

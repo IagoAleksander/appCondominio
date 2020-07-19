@@ -6,7 +6,6 @@ import 'package:app_condominio/utils/base_auth.dart';
 import 'package:app_condominio/utils/constants.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 

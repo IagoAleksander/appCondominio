@@ -1,16 +1,15 @@
 import 'dart:async';
 
 import 'package:app_condominio/common/ui/widgets/dialogs.dart';
+import 'package:app_condominio/common/ui/widgets/option_home_item.dart';
 import 'package:app_condominio/models/address.dart';
 import 'package:app_condominio/models/contact_info.dart';
-import 'package:app_condominio/user/ui/screens/home/widgets/option_home_item.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
-import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
@@ -81,9 +80,12 @@ class HomeScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         OptionHomeItem(
-                          labelText: "Eventos",
-                          iconData: Icons.event,
-                          onTapFunction: () {},
+                          labelText: "Salão de Festas",
+                          iconData: Icons.music_note,
+                          onTapFunction: () {
+                            Navigator.pushNamed(
+                                context, Constants.eventsCentreCalendarRoute);
+                          },
                         ),
                         SizedBox(
                           width: 40,

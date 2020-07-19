@@ -2,7 +2,6 @@ import 'package:app_condominio/utils/base_auth.dart';
 import 'package:app_condominio/utils/constants.dart';
 import 'package:app_condominio/utils/validators.dart';
 import 'package:bloc/bloc.dart';
-
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 

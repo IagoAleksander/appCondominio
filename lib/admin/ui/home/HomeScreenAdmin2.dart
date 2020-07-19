@@ -1,14 +1,11 @@
-import 'package:app_condominio/common/ui/widgets/dialogs.dart';
-import 'package:app_condominio/models/contact_info.dart';
-import 'package:app_condominio/user/ui/screens/home/widgets/option_home_item.dart';
+import 'package:app_condominio/common/ui/widgets/option_home_item.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
-class HomeScreenAdmin extends StatelessWidget {
+class HomeScreenAdmin2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,23 +45,17 @@ class HomeScreenAdmin extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         OptionHomeItem(
-                          labelText: "Centro de Moradores",
-                          iconData: Icons.people,
-                          onTapFunction: () {
-                            Navigator.pushNamed(
-                                context, Constants.residentsCentreRoute);
-                          },
+                          labelText: "Reuniões",
+                          iconData: Icons.event_seat,
+                          onTapFunction: () {},
                         ),
                         SizedBox(
                           width: 40,
                         ),
                         OptionHomeItem(
-                          labelText: "Centro de Visitantes",
-                          iconData: Icons.people,
-                          onTapFunction: () {
-                            Navigator.pushNamed(
-                                context, Constants.visitorsCentreAdminRoute);
-                          },
+                          labelText: "Contas e Pagamentos",
+                          iconData: Icons.attach_money,
+                          onTapFunction: () {},
                         ),
                       ],
                     ),
@@ -75,21 +66,19 @@ class HomeScreenAdmin extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         OptionHomeItem(
-                          labelText: "Definir Localização",
-                          iconData: Icons.location_on,
-                          onTapFunction: () {
-                            Navigator.pushNamed(
-                                context, Constants.chooseLocationRoute);
-                          },
+                          labelText: "Segurança",
+                          iconData: Icons.add,
+                          onTapFunction: () {},
                         ),
                         SizedBox(
                           width: 40,
                         ),
                         OptionHomeItem(
-                          labelText: "Configurar Contato",
-                          iconData: Icons.contact_phone,
+                          labelText: "Centro de\nEvento",
+                          iconData: Icons.event,
                           onTapFunction: () {
-                            getContact(context);
+                            Navigator.pushNamed(
+                                context, Constants.eventsCentreRoute);
                           },
                         ),
                       ],
@@ -104,36 +93,5 @@ class HomeScreenAdmin extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  getContact(BuildContext context) async {
-    Dialogs.showLoadingDialog(
-      context,
-      "Obtendo informações de contato",
-    );
-
-    DocumentReference documentReference =
-    Firestore.instance.collection("parameters").document("contactInfo");
-
-    await documentReference.get().then((snapshot) {
-      if (snapshot.exists) {
-        ContactInfo info = ContactInfo.fromJson(snapshot.data);
-        Navigator.pop(context);
-        Navigator.pushNamed(context, Constants.setContactInfoRoute,
-            arguments: info);
-      } else {
-        Navigator.pop(context);
-        Dialogs.showAlertDialog(
-          context,
-          "Erro ao obter informações de contato",
-        );
-      }
-    }).catchError((e) {
-      Navigator.pop(context);
-      Dialogs.showAlertDialog(
-        context,
-        "Erro ao obter informações de contato",
-      );
-    });
   }
 }

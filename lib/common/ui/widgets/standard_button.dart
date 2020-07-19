@@ -4,14 +4,18 @@ import 'package:flutter/material.dart';
 class StandardButton extends StatelessWidget {
   final String label;
   final Color backgroundColor;
-  final IconData icon;
+  final IconData prefixIcon;
+  final IconData suffixIcon;
   final Function onTapFunction;
+  final bool isMin;
 
   StandardButton(
       {@required this.label,
       this.backgroundColor = ColorsRes.primaryColorLight,
-      this.icon,
-      this.onTapFunction});
+      this.prefixIcon,
+      this.suffixIcon,
+      this.onTapFunction,
+      this.isMin = true});
 
   @override
   Widget build(BuildContext context) {
@@ -25,22 +29,22 @@ class StandardButton extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: isMin ? MainAxisSize.min : MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                prefixIcon != null
+                    ? Icon(prefixIcon, color: Colors.white, size: 18.0)
+                    : Container(),
                 Padding(
                   padding: EdgeInsets.only(
-                      top: 8.0,
-                      bottom: 8.0,
-                      left: 10.0,
-                      right: 10.0),
+                      top: 8.0, bottom: 8.0, left: 10.0, right: 10.0),
                   child: Text(
                     label,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
-                icon != null
-                    ? Icon(icon, color: Colors.white, size: 30.0)
+                suffixIcon != null
+                    ? Icon(suffixIcon, color: Colors.white, size: 30.0)
                     : Container(),
               ],
             ),

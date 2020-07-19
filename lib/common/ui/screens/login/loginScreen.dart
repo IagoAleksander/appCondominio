@@ -2,8 +2,8 @@ import 'package:app_condominio/user/bloc/LoginBloc.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/constants.dart';
 import 'package:app_condominio/utils/validators.dart';
-import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_login/flutter_login.dart';
 
 class LoginScreen extends StatelessWidget {

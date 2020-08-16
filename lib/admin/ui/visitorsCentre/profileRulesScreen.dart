@@ -53,6 +53,7 @@ class _ProfileRulesScreenState extends State<ProfileRulesScreen> {
                 child: StreamBuilder(
                     stream: Firestore.instance
                         .collection('profileRules')
+                        .where("isActive", isEqualTo: true)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -86,22 +87,18 @@ class _ProfileRulesScreenState extends State<ProfileRulesScreen> {
                                 String result = await showCreateRuleDialog(
                                     context, profileRulesBloc, rule);
 
-                                Scaffold.of(context).hideCurrentSnackBar();
-                                Scaffold.of(context).showSnackBar(SnackBar(
-                                    content: Text(result == "SUCCESS"
+                                Dialogs.showToast(
+                                    context,
+                                    result == "SUCCESS"
                                         ? 'Regra de perfil atualizada com sucesso'
                                         : result == "ERROR_NOTHING_CHANGE"
                                             ? 'Nada a atualizar'
-                                            : 'Erro na atualização da regra')));
+                                            : 'Erro na atualização da regra');
                               },
                               onDeleteFunction: () {
                                 rule.id =
                                     snapshot.data.documents[index].documentID;
                                 showDeleteRuleDialog(context, rule);
-                                Scaffold.of(context).hideCurrentSnackBar();
-                                Scaffold.of(context).showSnackBar(SnackBar(
-                                    content: Text(
-                                        'Regra de perfil removida com sucesso')));
                               },
                             );
                           });
@@ -120,11 +117,11 @@ class _ProfileRulesScreenState extends State<ProfileRulesScreen> {
                     onTapFunction: () async {
                       String result = await showCreateRuleDialog(
                           context, profileRulesBloc, null);
-                      Scaffold.of(context).hideCurrentSnackBar();
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text(result == "SUCCESS"
+                      Dialogs.showToast(
+                          context,
+                          result == "SUCCESS"
                               ? 'Regra de perfil criada com sucesso'
-                              : 'Erro na criação da regra')));
+                              : 'Erro na criação da regra');
                     },
                   ),
                 ),
@@ -294,9 +291,11 @@ class _ProfileRulesScreenState extends State<ProfileRulesScreen> {
         Firestore.instance
             .collection('profileRules')
             .document(rule.id)
-            .delete();
+            .updateData({"isActive": false});
 
         Timer(Duration(milliseconds: 1500), () {
+          Dialogs.showToast(context, 'Perfil removido com sucesso');
+
           Navigator.pop(context);
           Navigator.pop(context);
         });

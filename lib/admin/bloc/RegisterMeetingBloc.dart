@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app_condominio/models/feed_event.dart';
+import 'package:app_condominio/models/meeting.dart';
 import 'package:app_condominio/utils/constants.dart';
 import 'package:app_condominio/utils/validators.dart';
 import 'package:bloc/bloc.dart';
@@ -9,39 +10,32 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
-class RegisterEventBloc extends Bloc<GeneralBlocState, GeneralBlocState>
+class RegisterMeetingBloc extends Bloc<GeneralBlocState, GeneralBlocState>
     with Validators {
   //Focus node
   final FocusNode titleFocus = FocusNode();
   final FocusNode descriptionFocus = FocusNode();
+  final FocusNode videoIDFocus = FocusNode();
 
   //Subjects
-  var eventSubject = BehaviorSubject<FeedEvent>();
+  var meetingSubject = BehaviorSubject<Meeting>();
   var titleSubject = BehaviorSubject<String>();
   var descriptionSubject = BehaviorSubject<String>();
-  var imageUrlSubject = BehaviorSubject<String>();
-  var imageFileSubject = BehaviorSubject<File>();
-  var eventDateSubject = BehaviorSubject<int>();
+  var videoIDSubject = BehaviorSubject<String>();
+  var meetingDateSubject = BehaviorSubject<int>();
   var isActiveSubject = BehaviorSubject<bool>.seeded(true);
   var sendNotificationSubject = BehaviorSubject<bool>.seeded(true);
 
-  bool hasImageChanged = false;
-
 // Changes
-  Function(FeedEvent) get changeEvent => eventSubject.sink.add;
+  Function(Meeting) get changeEvent => meetingSubject.sink.add;
 
   Function(String) get changeTitle => titleSubject.sink.add;
 
   Function(String) get changeDescription => descriptionSubject.sink.add;
 
-  Function(String) get changeImageUrl => imageUrlSubject.sink.add;
+  Function(String) get changeVideoID => videoIDSubject.sink.add;
 
-  changeImageFile (File image){
-    hasImageChanged = true;
-    imageFileSubject.sink.add(image);
-  }
-
-  Function(int) get changeEventDate => eventDateSubject.sink.add;
+  Function(int) get changeMeetingDate => meetingDateSubject.sink.add;
 
   Function(bool) get changeIsActive => isActiveSubject.sink.add;
 
@@ -59,70 +53,51 @@ class RegisterEventBloc extends Bloc<GeneralBlocState, GeneralBlocState>
     yield event;
   }
 
-  RegisterEventBloc(FeedEvent event) {
-    if (event != null) {
-      changeEvent(event);
-      changeTitle(event.title);
-      changeDescription(event.description);
-      changeImageUrl(event.imageUrl);
-      changeEventDate(event.eventDateInMillis);
-      changeIsActive(event.isActive);
-      changeSendNotification(event.sendNotification);
+  RegisterMeetingBloc(Meeting meeting) {
+    if (meeting != null) {
+      changeEvent(meeting);
+      changeTitle(meeting.title);
+      changeDescription(meeting.description);
+      changeMeetingDate(meeting.meetingDateInMillis);
+      changeIsActive(meeting.isActive);
+      changeSendNotification(meeting.sendNotification);
     }
   }
 
   @override
   Future<Function> close() {
-    eventSubject.close();
+    meetingSubject.close();
     titleSubject.close();
     descriptionSubject.close();
-    imageUrlSubject.close();
-    imageFileSubject.close();
-    eventDateSubject.close();
+    videoIDSubject.close();
+    meetingDateSubject.close();
     isActiveSubject.close();
     sendNotificationSubject.close();
     return super.close();
   }
 
-  Future uploadFile() async {
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('event/${DateTime.now().millisecondsSinceEpoch}');
-    StorageUploadTask uploadTask =
-        storageReference.putFile(imageFileSubject.value);
-
-    await uploadTask.onComplete;
-    print('File Uploaded');
-
-    await storageReference.getDownloadURL().then((fileURL) {
-      changeImageUrl(fileURL);
-    });
-  }
-
-  Future<String> saveEvent() async {
+  Future<String> saveMeeting() async {
     try {
       if (titleSubject.value == null ||
           titleSubject.value.isEmpty ||
           descriptionSubject.value == null ||
           descriptionSubject.value.isEmpty ||
-          eventDateSubject.value == null) {
+          meetingDateSubject.value == null) {
         print("Error null values");
         return "ERROR";
       }
 
-      if (imageFileSubject.value != null) await uploadFile();
-
-      FeedEvent event = FeedEvent(
+      Meeting meeting = Meeting(
           title: titleSubject.value,
           description: descriptionSubject.value,
-          imageUrl: imageUrlSubject.value,
+          videoID: videoIDSubject.value,
           createdDateInMillis: DateTime.now().millisecondsSinceEpoch,
-          eventDateInMillis: eventDateSubject.value,
+          meetingDateInMillis: meetingDateSubject.value,
           isActive: isActiveSubject.value,
           sendNotification: sendNotificationSubject.value);
-      eventSubject.add(event);
+      meetingSubject.add(meeting);
 
-      Firestore.instance.collection('feedEvents').add(event.toJson());
+      Firestore.instance.collection('meetings').add(meeting.toJson());
 
       print("SUCCESS");
       return "SUCCESS";
@@ -132,29 +107,29 @@ class RegisterEventBloc extends Bloc<GeneralBlocState, GeneralBlocState>
     }
   }
 
-  Future<String> updateEvent() async {
+  Future<String> updateMeeting() async {
     try {
       if (titleSubject.value == null ||
           titleSubject.value.isEmpty ||
           descriptionSubject.value == null ||
           descriptionSubject.value.isEmpty ||
-          eventDateSubject.value == null) {
+          meetingDateSubject.value == null) {
         print("Error null values");
         return "ERROR";
       }
 
-      if (titleSubject.value == eventSubject.value.title &&
-          descriptionSubject.value == eventSubject.value.description &&
-          !hasImageChanged &&
-          eventDateSubject.value == eventSubject.value.eventDateInMillis &&
-          isActiveSubject.value == eventSubject.value.isActive) {
+      if (titleSubject.value == meetingSubject.value.title &&
+          descriptionSubject.value == meetingSubject.value.description &&
+          meetingDateSubject.value == meetingSubject.value.meetingDateInMillis &&
+          videoIDSubject.value == meetingSubject.value.videoID &&
+          isActiveSubject.value == meetingSubject.value.isActive) {
         print("Error same values");
         return "ERROR_NOTHING_CHANGE";
       }
 
       final snapShot = await Firestore.instance
-          .collection('feedEvents')
-          .document(eventSubject.value.id)
+          .collection('meetings')
+          .document(meetingSubject.value.id)
           .get();
 
       if (snapShot == null || !snapShot.exists) {
@@ -162,25 +137,23 @@ class RegisterEventBloc extends Bloc<GeneralBlocState, GeneralBlocState>
         return "ERROR_EVENT_NOT_FOUND";
       }
 
-      FeedEvent event = FeedEvent.fromJson(snapShot.data);
+      Meeting meeting = Meeting.fromJson(snapShot.data);
 
-      if (imageFileSubject.value != null) await uploadFile();
-
-      FeedEvent newEvent = FeedEvent(
+      Meeting newMeeting = Meeting(
           title: titleSubject.value,
           description: descriptionSubject.value,
-          imageUrl: imageUrlSubject.value,
-          createdDateInMillis: event.createdDateInMillis,
-          eventDateInMillis: eventDateSubject.value,
+          videoID: videoIDSubject.value,
+          createdDateInMillis: meeting.createdDateInMillis,
+          meetingDateInMillis: meetingDateSubject.value,
           isActive: isActiveSubject.value,
           sendNotification: sendNotificationSubject.value);
-      newEvent.id = eventSubject.value.id;
-      eventSubject.add(newEvent);
+      newMeeting.id = meetingSubject.value.id;
+      meetingSubject.add(newMeeting);
 
       Firestore.instance
-          .collection('feedEvents')
-          .document(eventSubject.value.id)
-          .setData(eventSubject.value.toJson());
+          .collection('meetings')
+          .document(meetingSubject.value.id)
+          .setData(meetingSubject.value.toJson());
 
       print("SUCCESS");
       return "SUCCESS";

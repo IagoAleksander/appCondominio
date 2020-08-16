@@ -29,7 +29,6 @@ class AccessCode {
 
   static fromJson(Map<String, dynamic> parsedJson) {
     return AccessCode(
-      id: parsedJson['id'],
       accessCodeNumber: parsedJson['accessCodeNumber'],
       profileRuleId: parsedJson['profileRuleId'],
       createdBy: parsedJson['createdBy'],

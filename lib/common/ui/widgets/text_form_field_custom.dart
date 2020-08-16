@@ -21,12 +21,14 @@ class TextFormFieldCustom extends StatelessWidget {
   final TextEditingController controller;
   final bool isOptional;
   final bool enabled;
+  final int minLines;
+  final int maxLines;
 
   TextFormFieldCustom(
       {this.labelText,
       this.hintText,
       this.labelError = "Preencha corretamente o campo",
-      @required this.iconData,
+      this.iconData,
       this.focusNode,
       this.nextFocusNode,
       this.textInputType,
@@ -38,7 +40,9 @@ class TextFormFieldCustom extends StatelessWidget {
       this.isError = false,
       this.controller,
       this.isOptional = false,
-      this.enabled = true});
+      this.enabled = true,
+      this.minLines = 1,
+      this.maxLines = 1});
 
   @override
   Widget build(BuildContext context) {
@@ -63,16 +67,17 @@ class TextFormFieldCustom extends StatelessWidget {
         filled: true,
         fillColor: Colors.grey[200],
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(90.0)),
+            borderRadius:
+                BorderRadius.all(Radius.circular(maxLines > 1 ? 10.0 : 90.0)),
             borderSide: BorderSide(color: Colors.white, width: 0.5)),
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(90.0)),
+            borderRadius: BorderRadius.all(Radius.circular(maxLines > 1 ? 10.0 : 90.0)),
             borderSide: BorderSide(color: Colors.white, width: 0.5)),
         focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(90.0)),
+            borderRadius: BorderRadius.all(Radius.circular(maxLines > 1 ? 10.0 : 90.0)),
             borderSide: BorderSide(color: ColorsRes.primaryColor, width: 1.5)),
         errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(90.0)),
+            borderRadius: BorderRadius.all(Radius.circular(maxLines > 1 ? 10.0 : 90.0)),
             borderSide: BorderSide(color: Colors.deepOrange, width: 1)),
         prefixIcon: iconData != null
             ? new Icon(
@@ -93,10 +98,11 @@ class TextFormFieldCustom extends StatelessWidget {
             ? isError ? labelError : validator(value, labelError)
             : null;
       },
-      inputFormatters:
-          textInputFormatter != null ? textInputFormatter : [],
+      inputFormatters: textInputFormatter != null ? textInputFormatter : [],
       onChanged: onChanged,
       obscureText: obscureText,
+      minLines: minLines,
+      maxLines: maxLines,
     );
   }
 

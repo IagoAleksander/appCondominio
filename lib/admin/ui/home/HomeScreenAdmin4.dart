@@ -53,12 +53,9 @@ class HomeScreenAdmin4 extends StatelessWidget {
                           width: 40,
                         ),
                         OptionHomeItem(
-                          labelText: "Salão de Festas",
-                          iconData: Icons.music_note,
-                          onTapFunction: () {
-                            Navigator.pushNamed(
-                                context, Constants.eventsCentreCalendarRoute);
-                          },
+                          labelText: "Segurança",
+                          iconData: Icons.add,
+                          onTapFunction: () {},
                         ),
                       ],
                     ),

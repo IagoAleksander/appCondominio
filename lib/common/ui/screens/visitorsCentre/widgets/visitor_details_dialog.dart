@@ -336,6 +336,7 @@ class VisitorDetailsDialog extends StatelessWidget {
                   StreamBuilder(
                     stream: Firestore.instance
                         .collection('profileRules')
+                        .where("isActive", isEqualTo: true)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData ||
@@ -542,7 +543,7 @@ class VisitorDetailsDialog extends StatelessWidget {
         await Firestore.instance
             .collection('accessCodes')
             .document(visitor.accessCode.accessCodeNumber)
-            .delete();
+            .updateData({"isActive": false});
 
         visitor.isLiberated = false;
 

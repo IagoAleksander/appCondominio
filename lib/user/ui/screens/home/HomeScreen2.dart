@@ -47,7 +47,10 @@ class HomeScreen2 extends StatelessWidget {
                         OptionHomeItem(
                           labelText: "Reuniões",
                           iconData: Icons.event_seat,
-                          onTapFunction: () {},
+                          onTapFunction: () {
+                            Navigator.pushNamed(
+                                context, Constants.meetingsFeedRoute);
+                          },
                         ),
                         SizedBox(
                           width: 40,

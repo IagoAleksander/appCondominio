@@ -161,7 +161,7 @@ class _EventsFeedScreenState extends State<EventsFeedScreen> {
                                 isGreaterThan: feedController.initialDateApplied)
                             .where("eventDateInMillis",
                                 isLessThan: feedController.finalDateApplied)
-                            .orderBy("eventDateInMillis")
+                            .orderBy("eventDateInMillis", descending: true)
                             .limit(20)
                             .snapshots(),
                         builder: (context, snapshot) {
@@ -275,7 +275,7 @@ class _EventsFeedScreenState extends State<EventsFeedScreen> {
                                                 padding: const EdgeInsets.only(
                                                     left: 16.0),
                                                 child: Container(
-                                                  padding: EdgeInsets.all(12.0),
+                                                  padding: EdgeInsets.all(4.0),
                                                   decoration: new BoxDecoration(
                                                       border: new Border.all(
                                                           color: Colors.white24),

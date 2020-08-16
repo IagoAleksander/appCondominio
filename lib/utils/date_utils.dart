@@ -56,6 +56,20 @@ class DateUtils {
     return formatted;
   }
 
+  static String getFormattedDaysFromDate(int dateInMillis) {
+    final DateFormat formatter = DateFormat('dd/MM/yyyy');
+    final String formatted = formatter
+        .format(DateTime.fromMillisecondsSinceEpoch(dateInMillis));
+    return formatted;
+  }
+
+  static String getFormattedTimeFromDate(int dateInMillis) {
+    final DateFormat formatter = DateFormat('HH:mm');
+    final String formatted = formatter
+        .format(DateTime.fromMillisecondsSinceEpoch(dateInMillis));
+    return formatted;
+  }
+
   static const int MAX_DATE = 5000000000000;
   static const int DAY_IN_MILLIS = 86400000;
 }

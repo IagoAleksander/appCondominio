@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:app_condominio/admin/bloc/RegisterReportBloc.dart';
 import 'package:app_condominio/common/ui/widgets/dialogs.dart';
 import 'package:app_condominio/common/ui/widgets/text_form_field_custom.dart';
-import 'package:app_condominio/common/ui/widgets/text_form_field_custom_big.dart';
 import 'package:app_condominio/models/event_report.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +66,7 @@ class _CreateEventReportScreenState extends State<CreateEventReportScreen> {
               child: IntrinsicHeight(
                 child: Container(
                   color: ColorsRes.primaryColor,
-                  padding: const EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -117,12 +116,15 @@ class _CreateEventReportScreenState extends State<CreateEventReportScreen> {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 8.0),
                                       alignment: Alignment.center,
-                                      child: TextFormFieldCustomBig(
+                                      child: TextFormFieldCustom(
+                                        maxLines: 8,
+                                        minLines: 3,
+                                        textInputType: TextInputType.multiline,
+                                        textInputAction: TextInputAction.done,
                                         controller: _subtitleFieldController,
                                         labelText: "Descrição",
                                         focusNode:
                                             registerReportBloc.descriptionFocus,
-                                        textInputAction: TextInputAction.done,
                                         onChanged: registerReportBloc
                                             .changeDescription,
                                       ),
@@ -155,28 +157,24 @@ class _CreateEventReportScreenState extends State<CreateEventReportScreen> {
                                                       Color>(Colors.white),
                                             ),
                                             width: 160,
-                                            // ignore: missing_return
                                             onPressed: () async {
                                               if (_formKey.currentState
                                                   .validate()) {
                                                 String result;
                                                 if (widget.report == null) {
-                                                  (_mainGlobalKey.currentState
-                                                          as ScaffoldState)
-                                                      .showSnackBar(SnackBar(
-                                                          content: Text(
-                                                              'Registrando relatório')));
-
+                                                  Dialogs.showLoadingDialog(
+                                                    context,
+                                                    'Registrando relatório...',
+                                                  );
                                                   result =
                                                       await registerReportBloc
-                                                          .saveReport(widget.eventID);
+                                                          .saveReport(
+                                                              widget.eventID);
                                                 } else {
-                                                  (_mainGlobalKey.currentState
-                                                          as ScaffoldState)
-                                                      .showSnackBar(SnackBar(
-                                                          content: Text(
-                                                              'Atualizando relatório')));
-
+                                                  Dialogs.showLoadingDialog(
+                                                    context,
+                                                    'Atualizando relatório...',
+                                                  );
                                                   result =
                                                       await registerReportBloc
                                                           .updateEvent();
@@ -188,49 +186,35 @@ class _CreateEventReportScreenState extends State<CreateEventReportScreen> {
                                                         Duration(
                                                             milliseconds: 1500),
                                                         () {
-                                                      (_mainGlobalKey
-                                                                  .currentState
-                                                              as ScaffoldState)
-                                                          .hideCurrentSnackBar();
                                                       Dialogs.showToast(
                                                           context,
-                                                          widget.report ==
-                                                                  null
+                                                          widget.report == null
                                                               ? 'Relatório registrado com sucesso'
                                                               : 'Relatório atualizado com sucesso');
 
                                                       Navigator.pop(context);
+                                                      Navigator.pop(context);
                                                     });
                                                     break;
                                                   case "ERROR_NOTHING_CHANGE":
-                                                    (_mainGlobalKey.currentState
-                                                            as ScaffoldState)
-                                                        .hideCurrentSnackBar();
-                                                    (_mainGlobalKey.currentState
-                                                            as ScaffoldState)
-                                                        .showSnackBar(SnackBar(
-                                                            content: Text(
-                                                                'Nada a atualizar')));
                                                     Timer(
                                                         Duration(
                                                             milliseconds: 1500),
                                                         () {
+                                                      Dialogs.showToast(context,
+                                                          'Nada a atualizar');
+                                                      Navigator.pop(context);
                                                       Navigator.pop(context);
                                                     });
                                                     break;
                                                   default:
-                                                    (_mainGlobalKey.currentState
-                                                            as ScaffoldState)
-                                                        .hideCurrentSnackBar();
-                                                    (_mainGlobalKey.currentState
-                                                            as ScaffoldState)
-                                                        .showSnackBar(SnackBar(
-                                                            content: Text(
-                                                                'Erro no registro de relatório')));
                                                     Timer(
                                                         Duration(
                                                             milliseconds: 1500),
                                                         () {
+                                                      Dialogs.showToast(context,
+                                                          'Erro no registro do relatório');
+                                                      Navigator.pop(context);
                                                       Navigator.pop(context);
                                                     });
                                                     break;

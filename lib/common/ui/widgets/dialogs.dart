@@ -33,16 +33,19 @@ class Dialogs {
         });
   }
 
-  static showAlertDialog(BuildContext context, String label) {
+  static showAlertDialog(BuildContext context, String label,
+      {Function onPressed}) {
     // set up the buttons
     Widget continueButton = FlatButton(
       child: Text(
         "Ok",
         style: TextStyle(color: Colors.white),
       ),
-      onPressed: () {
-        Navigator.pop(context);
-      },
+      onPressed: onPressed != null
+          ? onPressed
+          : () {
+              Navigator.pop(context);
+            },
     );
 
     // set up the AlertDialog

@@ -58,7 +58,7 @@ class _EventVisualizationScreenState extends State<EventVisualizationScreen> {
                         return LoadingIndicator();
                       }
 
-                      if (!snapshot.hasData) {
+                      if (!snapshot.hasData || snapshot.data.data == null) {
                         return Container(
                             child: Center(
                                 child: Text(

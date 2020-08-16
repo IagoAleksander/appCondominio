@@ -165,6 +165,7 @@ class _VisitorsCentreScreenState extends State<VisitorsCentreScreen> {
                     label: "Buscar visitante",
                     backgroundColor: ColorsRes.primaryColorLight,
                     onTapFunction: () {
+                      FocusScope.of(context).requestFocus(new FocusNode());
                       if (_formKey.currentState.validate()) {
                         searchVisitor();
                       }

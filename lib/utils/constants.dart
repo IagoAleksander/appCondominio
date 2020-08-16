@@ -21,6 +21,14 @@ class Constants {
   static const String createEventReportRoute = '/createEventReport';
   static const String eventReportRoute = '/eventReport';
   static const String reportVisualizationRoute = '/reportVisualization';
+  static const String meetingsFeedRoute = '/meetingsFeed';
+  static const String meetingDetailsRoute = '/meetingDetails';
+  static const String registerMeetingRoute = '/registerMeeting';
+  static const String meetingVisualizationRoute = '/meetingVisualization';
+  static const String createSurveyRoute = '/createSurvey';
+  static const String answerSurveyRoute = '/answerSurvey';
+  static const String meetingsCentreRoute = '/meetingsCentre';
+  static const String resultSurveyRoute = '/resultSurvey';
 
   static const LOGIN = "Login";
   static const PASSWORD = "Senha";

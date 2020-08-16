@@ -1,73 +1,73 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:app_condominio/admin/bloc/RegisterEventBloc.dart';
+import 'package:app_condominio/admin/bloc/RegisterMeetingBloc.dart';
 import 'package:app_condominio/common/ui/widgets/dialogs.dart';
 import 'package:app_condominio/common/ui/widgets/text_form_field_custom.dart';
 import 'package:app_condominio/models/date_picker_custom.dart';
 import 'package:app_condominio/models/feed_event.dart';
+import 'package:app_condominio/models/meeting.dart';
 import 'package:app_condominio/models/time_picker_custom.dart';
 import 'package:app_condominio/utils/colors_res.dart';
 import 'package:app_condominio/utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
-import 'package:image_picker/image_picker.dart'; // For Image Picker
 
-class RegisterEventScreen extends StatefulWidget {
-  FeedEvent event;
+class RegisterMeetingScreen extends StatefulWidget {
+  Meeting meeting;
 
-  RegisterEventScreen(this.event);
+  RegisterMeetingScreen(this.meeting);
 
   @override
-  _RegisterEventScreenState createState() => _RegisterEventScreenState();
+  _RegisterMeetingScreenState createState() => _RegisterMeetingScreenState();
 }
 
-class _RegisterEventScreenState extends State<RegisterEventScreen> {
-  RegisterEventBloc registerEventBloc;
+class _RegisterMeetingScreenState extends State<RegisterMeetingScreen> {
+  RegisterMeetingBloc registerMeetingBloc;
   GlobalKey _mainGlobalKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
   bool _autoValidate = false;
-
-  bool _hasImage = false;
   bool _timeClicked = false;
 
   var _titleFieldController;
   var _subtitleFieldController;
+  var _videoIDFieldController;
 
   @override
   void initState() {
-    registerEventBloc = RegisterEventBloc(widget.event);
+    registerMeetingBloc = RegisterMeetingBloc(widget.meeting);
 
     _titleFieldController = TextEditingController(
-        text: widget.event != null ? widget.event.title : "");
+        text: widget.meeting != null ? widget.meeting.title : "");
     _subtitleFieldController = TextEditingController(
-        text: widget.event != null ? widget.event.description : "");
+        text: widget.meeting != null ? widget.meeting.description : "");
+    _videoIDFieldController = TextEditingController(
+        text: widget.meeting != null ? widget.meeting.videoID : "");
 
-    if (widget.event == null)
-      widget.event = FeedEvent();
-    else if (widget.event.imageUrl != null) {
-      _hasImage = true;
-    }
+    if (widget.meeting == null) widget.meeting = Meeting();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _mainGlobalKey,
-        backgroundColor: ColorsRes.primaryColor,
-        appBar: AppBar(
-          title: Text(
-            widget.event.id == null ? "Cadastro de Evento" : "Edição de Evento",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16.0,
-            ),
+      key: _mainGlobalKey,
+      backgroundColor: ColorsRes.primaryColor,
+      appBar: AppBar(
+        title: Text(
+          widget.meeting.id == null
+              ? "Cadastro de Reunião"
+              : "Edição de Reunião",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.0,
           ),
-          backgroundColor: ColorsRes.primaryColorLight,
         ),
-        body: LayoutBuilder(builder: (context, constraint) {
+        backgroundColor: ColorsRes.primaryColorLight,
+      ),
+      body: LayoutBuilder(
+        builder: (context, constraint) {
           return SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraint.maxHeight),
@@ -99,7 +99,7 @@ class _RegisterEventScreenState extends State<RegisterEventScreen> {
                                     Padding(
                                       padding: const EdgeInsets.all(10.0),
                                       child: Text(
-                                        'Adicione as informações do evento\na ser cadastrado',
+                                        'Adicione as informações da reunião\na ser cadastrada',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(fontSize: 14),
                                       ),
@@ -111,29 +111,45 @@ class _RegisterEventScreenState extends State<RegisterEventScreen> {
                                       child: TextFormFieldCustom(
                                         controller: _titleFieldController,
                                         labelText: "Título",
-                                        focusNode: registerEventBloc.titleFocus,
-                                        nextFocusNode:
-                                            registerEventBloc.descriptionFocus,
+                                        focusNode:
+                                            registerMeetingBloc.titleFocus,
+                                        nextFocusNode: registerMeetingBloc
+                                            .descriptionFocus,
                                         textInputAction: TextInputAction.next,
                                         onChanged:
-                                            registerEventBloc.changeTitle,
+                                            registerMeetingBloc.changeTitle,
                                       ),
                                     ),
                                     Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0),
                                       alignment: Alignment.center,
                                       child: TextFormFieldCustom(
                                         maxLines: 8,
                                         minLines: 3,
                                         textInputType: TextInputType.multiline,
-                                        textInputAction: TextInputAction.done,
+                                        textInputAction: TextInputAction.next,
                                         controller: _subtitleFieldController,
                                         labelText: "Descrição",
+                                        focusNode: registerMeetingBloc
+                                            .descriptionFocus,
+                                        nextFocusNode:
+                                            registerMeetingBloc.videoIDFocus,
+                                        onChanged: registerMeetingBloc
+                                            .changeDescription,
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.only(
+                                          top: 8.0, bottom: 8.0),
+                                      alignment: Alignment.center,
+                                      child: TextFormFieldCustom(
+                                        controller: _videoIDFieldController,
+                                        labelText: "Identificador do vídeo",
                                         focusNode:
-                                            registerEventBloc.descriptionFocus,
+                                            registerMeetingBloc.videoIDFocus,
+                                        textInputAction: TextInputAction.next,
                                         onChanged:
-                                            registerEventBloc.changeDescription,
+                                            registerMeetingBloc.changeVideoID,
+                                        isOptional: true,
                                       ),
                                     ),
                                     SizedBox(
@@ -153,25 +169,25 @@ class _RegisterEventScreenState extends State<RegisterEventScreen> {
                                                   .requestFocus(
                                                       new FocusNode());
                                               setState(
-                                                () => registerEventBloc
-                                                    .changeEventDate(
+                                                () => registerMeetingBloc
+                                                    .changeMeetingDate(
                                                   value.millisecondsSinceEpoch,
                                                 ),
                                               );
                                             },
-                                            selectedDate: registerEventBloc
-                                                        .eventDateSubject
+                                            selectedDate: registerMeetingBloc
+                                                        .meetingDateSubject
                                                         .value ==
                                                     null
                                                 ? null
                                                 : DateTime
                                                     .fromMillisecondsSinceEpoch(
-                                                        registerEventBloc
-                                                            .eventDateSubject
+                                                        registerMeetingBloc
+                                                            .meetingDateSubject
                                                             .value),
                                             isError: _autoValidate &&
-                                                registerEventBloc
-                                                        .eventDateSubject
+                                                registerMeetingBloc
+                                                        .meetingDateSubject
                                                         .value ==
                                                     null,
                                           ),
@@ -179,8 +195,8 @@ class _RegisterEventScreenState extends State<RegisterEventScreen> {
                                         SizedBox(
                                           width: 10,
                                         ),
-                                        registerEventBloc
-                                                    .eventDateSubject.value !=
+                                        registerMeetingBloc
+                                                    .meetingDateSubject.value !=
                                                 null
                                             ? Container(
                                                 width: 160,
@@ -191,41 +207,41 @@ class _RegisterEventScreenState extends State<RegisterEventScreen> {
                                                     FocusScope.of(context)
                                                         .requestFocus(
                                                             new FocusNode());
-                                                    setState(
-                                                      () {
-                                                        _timeClicked = true;
-                                                        registerEventBloc.changeEventDate(DateUtils.getDayFirstMinute(
-                                                                DateTime.fromMillisecondsSinceEpoch(
-                                                                    registerEventBloc
-                                                                        .eventDateSubject
-                                                                        .value))
-                                                            .add(Duration(
-                                                                hours:
-                                                                    value.hour,
-                                                                minutes: value
-                                                                    .minute))
-                                                            .millisecondsSinceEpoch);
-                                                      },
-                                                    );
+                                                    setState(() {
+                                                      _timeClicked = true;
+                                                      registerMeetingBloc.changeMeetingDate(DateUtils
+                                                              .getDayFirstMinute(
+                                                                  DateTime.fromMillisecondsSinceEpoch(
+                                                                      registerMeetingBloc
+                                                                          .meetingDateSubject
+                                                                          .value))
+                                                          .add(Duration(
+                                                              hours: value.hour,
+                                                              minutes:
+                                                                  value.minute))
+                                                          .millisecondsSinceEpoch);
+                                                    });
                                                   },
                                                   selectedTime:
-                                                      widget.event.id != null ||
+                                                      widget.meeting.id !=
+                                                                  null ||
                                                               _timeClicked
                                                           ? TimeOfDay(
                                                               hour: DateTime.fromMillisecondsSinceEpoch(
-                                                                      registerEventBloc
-                                                                          .eventDateSubject
+                                                                      registerMeetingBloc
+                                                                          .meetingDateSubject
                                                                           .value)
                                                                   .hour,
                                                               minute: DateTime.fromMillisecondsSinceEpoch(
-                                                                      registerEventBloc
-                                                                          .eventDateSubject
+                                                                      registerMeetingBloc
+                                                                          .meetingDateSubject
                                                                           .value)
                                                                   .minute,
                                                             )
                                                           : null,
                                                   isError: _autoValidate &&
-                                                      widget.event.id == null &&
+                                                      widget.meeting.id ==
+                                                          null &&
                                                       _timeClicked == false,
                                                 ),
                                               )
@@ -233,10 +249,10 @@ class _RegisterEventScreenState extends State<RegisterEventScreen> {
                                       ],
                                     ),
                                     _autoValidate &&
-                                            (widget.event.id == null &&
+                                            (widget.meeting.id == null &&
                                                 _timeClicked == false)
-                                        ? registerEventBloc
-                                                    .eventDateSubject.value ==
+                                        ? registerMeetingBloc
+                                                    .meetingDateSubject.value ==
                                                 null
                                             ? Padding(
                                                 padding: const EdgeInsets.only(
@@ -262,130 +278,6 @@ class _RegisterEventScreenState extends State<RegisterEventScreen> {
                                     ),
                                     Column(
                                       children: <Widget>[
-                                        Text(
-                                          _hasImage
-                                              ? 'Imagem do evento:'
-                                              : 'Adicione uma imagem para o evento:',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                        SizedBox(
-                                          height: 12,
-                                        ),
-                                        !_hasImage
-                                            ? ProgressButton(
-                                                color: ColorsRes.primaryColor,
-                                                borderRadius: 90.0,
-                                                defaultWidget: Text(
-                                                  "BUSCAR IMAGEM",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                                progressWidget:
-                                                    const CircularProgressIndicator(
-                                                  strokeWidth: 4,
-                                                  backgroundColor:
-                                                      ColorsRes.accentColor,
-                                                  valueColor:
-                                                      const AlwaysStoppedAnimation<
-                                                          Color>(Colors.white),
-                                                ),
-                                                width: 160,
-                                                // ignore: missing_return
-                                                onPressed: () => chooseFile)
-                                            : Container(),
-                                        _hasImage
-                                            ? registerEventBloc.imageFileSubject
-                                                        .value !=
-                                                    null
-                                                ? Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 10.0),
-                                                    child: Image.file(
-                                                      registerEventBloc
-                                                          .imageFileSubject
-                                                          .value,
-                                                      height: 250,
-                                                    ),
-                                                  )
-                                                : widget.event.imageUrl != null
-                                                    ? Image.network(
-                                                        widget.event.imageUrl,
-                                                        height: 150,
-                                                      )
-                                                    : Container()
-                                            : Container(),
-                                        _hasImage
-                                            ? Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 20.0),
-                                                    child: ProgressButton(
-                                                        color: Colors.redAccent,
-                                                        borderRadius: 90.0,
-                                                        defaultWidget: Text(
-                                                          "REMOVER FOTO",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
-                                                        ),
-                                                        progressWidget:
-                                                            const CircularProgressIndicator(
-                                                          strokeWidth: 4,
-                                                          backgroundColor:
-                                                              ColorsRes
-                                                                  .accentColor,
-                                                          valueColor:
-                                                              const AlwaysStoppedAnimation<
-                                                                      Color>(
-                                                                  Colors.white),
-                                                        ),
-                                                        width: 146,
-                                                        // ignore: missing_return
-                                                        onPressed: () =>
-                                                            removeFile),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 12,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 24.0),
-                                                    child: ProgressButton(
-                                                        color: ColorsRes
-                                                            .primaryColor,
-                                                        borderRadius: 90.0,
-                                                        defaultWidget: Text(
-                                                          "TROCAR FOTO",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
-                                                        ),
-                                                        progressWidget:
-                                                            const CircularProgressIndicator(
-                                                          strokeWidth: 4,
-                                                          backgroundColor:
-                                                              ColorsRes
-                                                                  .accentColor,
-                                                          valueColor:
-                                                              const AlwaysStoppedAnimation<
-                                                                      Color>(
-                                                                  Colors.white),
-                                                        ),
-                                                        width: 146,
-                                                        // ignore: missing_return
-                                                        onPressed: () =>
-                                                            chooseFile),
-                                                  ),
-                                                ],
-                                              )
-                                            : Container(),
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               top: 18.0, right: 18),
@@ -397,70 +289,34 @@ class _RegisterEventScreenState extends State<RegisterEventScreen> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   StreamBuilder(
-                                                      stream: registerEventBloc
-                                                          .streamIsActive,
+                                                      stream:
+                                                          registerMeetingBloc
+                                                              .streamIsActive,
                                                       builder:
                                                           (context, snapshot) {
                                                         return SizedBox(
                                                           height: 24,
                                                           width: 24,
                                                           child: Checkbox(
-                                                            value: registerEventBloc
+                                                            value: registerMeetingBloc
                                                                 .isActiveSubject
                                                                 .value,
                                                             onChanged:
-                                                                registerEventBloc
+                                                                registerMeetingBloc
                                                                     .changeIsActive,
                                                           ),
                                                         );
                                                       }),
                                                   GestureDetector(
                                                     onTap: () {
-                                                      registerEventBloc
+                                                      registerMeetingBloc
                                                           .changeIsActive(
-                                                              !registerEventBloc
+                                                              !registerMeetingBloc
                                                                   .isActiveSubject
                                                                   .value);
                                                     },
                                                     child: Text(
-                                                      " Evento ativo",
-                                                      style: TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  StreamBuilder(
-                                                      stream: registerEventBloc
-                                                          .streamSendNotification,
-                                                      builder:
-                                                          (context, snapshot) {
-                                                        return SizedBox(
-                                                          height: 24,
-                                                          width: 24,
-                                                          child: Checkbox(
-                                                            value: registerEventBloc
-                                                                .sendNotificationSubject
-                                                                .value,
-                                                            onChanged:
-                                                                registerEventBloc
-                                                                    .changeSendNotification,
-                                                          ),
-                                                        );
-                                                      }),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      registerEventBloc
-                                                          .changeSendNotification(
-                                                              !registerEventBloc
-                                                                  .sendNotificationSubject
-                                                                  .value);
-                                                    },
-                                                    child: Text(
-                                                      " Enviar notificação",
+                                                      " Reunião ativa",
                                                       style: TextStyle(
                                                           fontSize: 14),
                                                     ),
@@ -477,7 +333,7 @@ class _RegisterEventScreenState extends State<RegisterEventScreen> {
                                             color: ColorsRes.primaryColor,
                                             borderRadius: 90.0,
                                             defaultWidget: Text(
-                                              widget.event.id == null
+                                              widget.meeting.id == null
                                                   ? "REGISTRAR"
                                                   : "ATUALIZAR",
                                               style: TextStyle(
@@ -497,25 +353,28 @@ class _RegisterEventScreenState extends State<RegisterEventScreen> {
                                             onPressed: () async {
                                               if (_formKey.currentState
                                                       .validate() &&
-                                                  (widget.event.id != null ||
+                                                  (widget.meeting.id != null ||
                                                       _timeClicked)) {
+                                                FocusScope.of(context)
+                                                    .requestFocus(
+                                                        new FocusNode());
                                                 String result;
-                                                if (widget.event.id == null) {
+                                                if (widget.meeting.id == null) {
                                                   Dialogs.showLoadingDialog(
                                                     context,
-                                                    'Registrando evento...',
+                                                    'Registrando reunião...',
                                                   );
                                                   result =
-                                                      await registerEventBloc
-                                                          .saveEvent();
+                                                      await registerMeetingBloc
+                                                          .saveMeeting();
                                                 } else {
                                                   Dialogs.showLoadingDialog(
                                                     context,
-                                                    'Atualizando evento...',
+                                                    'Atualizando reunião...',
                                                   );
                                                   result =
-                                                      await registerEventBloc
-                                                          .updateEvent();
+                                                      await registerMeetingBloc
+                                                          .updateMeeting();
                                                 }
 
                                                 switch (result) {
@@ -526,10 +385,10 @@ class _RegisterEventScreenState extends State<RegisterEventScreen> {
                                                         () {
                                                       Dialogs.showToast(
                                                           context,
-                                                          widget.event.id ==
+                                                          widget.meeting.id ==
                                                                   null
-                                                              ? 'Evento registrado com sucesso'
-                                                              : 'Evento atualizado com sucesso');
+                                                              ? 'Reunião registrada com sucesso'
+                                                              : 'Reunião atualizada com sucesso');
 
                                                       Navigator.pop(context);
                                                       Navigator.pop(context);
@@ -552,7 +411,7 @@ class _RegisterEventScreenState extends State<RegisterEventScreen> {
                                                             milliseconds: 1500),
                                                         () {
                                                       Dialogs.showToast(context,
-                                                          'Erro no registro do evento');
+                                                          'Erro no registro de reunião');
                                                       Navigator.pop(context);
                                                       Navigator.pop(context);
                                                     });
@@ -581,25 +440,8 @@ class _RegisterEventScreenState extends State<RegisterEventScreen> {
               ),
             ),
           );
-        }));
-  }
-
-  Future chooseFile() async {
-    await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
-      if (image != null) {
-        setState(() {
-          _hasImage = true;
-          registerEventBloc.changeImageFile(image);
-        });
-      }
-    });
-  }
-
-  Future removeFile() async {
-    setState(() {
-      _hasImage = false;
-      registerEventBloc.changeImageFile(null);
-      registerEventBloc.imageUrlSubject.add(null);
-    });
+        },
+      ),
+    );
   }
 }

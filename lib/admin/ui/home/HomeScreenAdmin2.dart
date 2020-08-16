@@ -45,9 +45,12 @@ class HomeScreenAdmin2 extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         OptionHomeItem(
-                          labelText: "Reuniões",
+                          labelText: "Centro de\nReuniões",
                           iconData: Icons.event_seat,
-                          onTapFunction: () {},
+                          onTapFunction: () {
+                            Navigator.pushNamed(
+                                context, Constants.meetingsCentreRoute);
+                          },
                         ),
                         SizedBox(
                           width: 40,
@@ -66,9 +69,12 @@ class HomeScreenAdmin2 extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         OptionHomeItem(
-                          labelText: "Segurança",
-                          iconData: Icons.add,
-                          onTapFunction: () {},
+                          labelText: "Salão de Festas",
+                          iconData: Icons.music_note,
+                          onTapFunction: () {
+                            Navigator.pushNamed(
+                                context, Constants.eventsCentreCalendarRoute);
+                          },
                         ),
                         SizedBox(
                           width: 40,

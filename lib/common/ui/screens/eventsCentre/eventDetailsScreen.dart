@@ -245,7 +245,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       ),
                       event.imageUrl != null
                           ? Container(
-                              padding: EdgeInsets.all(12.0),
+                              padding: EdgeInsets.all(4.0),
                               decoration: new BoxDecoration(
                                   border: new Border.all(color: Colors.white24),
                                   borderRadius: BorderRadius.circular(4.0),

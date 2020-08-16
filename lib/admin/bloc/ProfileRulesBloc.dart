@@ -46,8 +46,7 @@ class ProfileRulesBloc extends Bloc<GeneralBlocState, GeneralBlocState>
       changeTitle(rule.title);
       changeValue(rule.value.toString());
       changeUnit(rule.unit);
-    }
-    else {
+    } else {
       changeTitle("");
       changeValue("");
       changeUnit("horas");
@@ -76,7 +75,8 @@ class ProfileRulesBloc extends Bloc<GeneralBlocState, GeneralBlocState>
       ProfileRule rule = ProfileRule(
           title: titleSubject.value,
           value: int.parse(valueSubject.value),
-          unit: unitSubject.value);
+          unit: unitSubject.value,
+          isActive: true);
       ruleSubject.add(rule);
 
       Firestore.instance.collection('profileRules').add(rule.toJson());
@@ -120,7 +120,8 @@ class ProfileRulesBloc extends Bloc<GeneralBlocState, GeneralBlocState>
       ProfileRule rule = ProfileRule(
           title: titleSubject.value,
           value: int.parse(valueSubject.value),
-          unit: unitSubject.value);
+          unit: unitSubject.value,
+          isActive: true);
 
       Firestore.instance
           .collection('profileRules')

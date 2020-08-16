@@ -18,9 +18,6 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 class EventsCentreScreen extends StatefulWidget {
   @override
   _EventsCentreScreenState createState() => _EventsCentreScreenState();
-
-  AccessHistoryPage accessHistoryPage;
-  VisitorsLiberatedPage visitorsLiberatedPage;
 }
 
 class _EventsCentreScreenState extends State<EventsCentreScreen> {
@@ -174,12 +171,11 @@ class _EventsCentreScreenState extends State<EventsCentreScreen> {
                     return StreamBuilder(
                       stream: Firestore.instance
                           .collection('feedEvents')
-                          .where("isActive", isEqualTo: true)
                           .where("eventDateInMillis",
                               isGreaterThan: feedController.initialDateApplied)
                           .where("eventDateInMillis",
                               isLessThan: feedController.finalDateApplied)
-                          .orderBy("eventDateInMillis")
+                          .orderBy("eventDateInMillis", descending: true)
                           .limit(20)
                           .snapshots(),
                       builder: (context, snapshot) {
@@ -293,7 +289,7 @@ class _EventsCentreScreenState extends State<EventsCentreScreen> {
                                               padding: const EdgeInsets.only(
                                                   left: 16.0),
                                               child: Container(
-                                                padding: EdgeInsets.all(12.0),
+                                                padding: EdgeInsets.all(4.0),
                                                 decoration: new BoxDecoration(
                                                     border: new Border.all(
                                                         color: Colors.white24),
